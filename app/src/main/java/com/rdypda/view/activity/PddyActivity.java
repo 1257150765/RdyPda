@@ -57,6 +57,7 @@ public class PddyActivity extends BaseActivity implements IPddyView {
         ButterKnife.bind(this);
         initView();
         presenter = new PddyPresenter(this, this);
+
     }
 
     @Override

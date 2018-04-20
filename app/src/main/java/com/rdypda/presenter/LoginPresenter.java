@@ -186,7 +186,7 @@ public class LoginPresenter extends BasePresenter {
     //获取当前ip
     public String getCurrentIp(){
         if (preferenUtil.getString("ipAddress").equals("")){
-            return "http://yun.ruiduoyi.com";
+            return WebService.URL;
         }else {
             return preferenUtil.getString("ipAddress");
         }

@@ -94,13 +94,12 @@ public class LlddrMsgPresenter extends BasePresenter{
     }
 
     //打印事件
-    public void printEven(final String wldm, final String wlpm, final String ywwlpm, final String tmbh, final String tmpch){
+    public void printEven(final String wldm, final String wlpm, final String ywwlpm, final String tmbh, final String tmpch, final String wlgg){
 
         if (!BluetoothAdapter.getDefaultAdapter().isEnabled()){
             view.showBlueToothAddressDialog();
             return;
         }
-
         if (preferenUtil.getString("blueToothAddress").equals("")){
             view.showBlueToothAddressDialog();
             return;
@@ -118,7 +117,7 @@ public class LlddrMsgPresenter extends BasePresenter{
                 util.openPort(address);
                 util.printFont("原料编号:"+wldm.trim(),15,55);
                 util.printFont("品名规格:"+wlpm.trim()+",",15,105);
-                util.printFont(ywwlpm.trim()+" ",15,140);
+                util.printFont(wlgg+" ",15,140);
                 util.printFont("批次号:"+tmpch.trim(),15,185);
                 util.printFont("条码编号:"+tmbh.trim(),15,235);
                 util.printQRCode(printMsg,320,55,6);

@@ -61,6 +61,7 @@ public class WldAdapter extends BaseRecyclerAdapter<WldAdapter.WldViewHolder,Map
                     intent.putExtra("wlpm",map.get("wlpm"));
                     intent.putExtra("wfsl",map.get("ni_qty"));
                     intent.putExtra("xqsl",map.get("qty"));
+                    intent.putExtra("wlgg",map.get("wlgg"));
                     context.startActivity(intent);
                 }
             }

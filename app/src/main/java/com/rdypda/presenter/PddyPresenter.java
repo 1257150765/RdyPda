@@ -315,7 +315,7 @@ public class PddyPresenter extends BasePresenter{
         });
     }
 
-    public void printEvent(final String qrCode, final String wlpmChinese, final String wlpmEnlight) {
+    public void printEvent(final String qrCode, final String wlpmChinese, final String wlpmEnlight, final String wlgg) {
         if (!BluetoothAdapter.getDefaultAdapter().isEnabled()){
             view.showBlueToothAddressDialog();
             return;
@@ -328,6 +328,7 @@ public class PddyPresenter extends BasePresenter{
             view.setShowMsgDialogEnable("请先获取条码序号");
             return;
         }
+
         view.setShowProgressDialogEnable(true);
         final PrinterUtil util=new PrinterUtil(context);
         final QrCodeUtil qrCodeUtil = new QrCodeUtil(qrCode);
@@ -338,7 +339,7 @@ public class PddyPresenter extends BasePresenter{
                     util.openPort(address);
                     util.printFont("原料编号:"+qrCodeUtil.getWlbh(),15,55);
                     util.printFont("品名规格:"+wlpmChinese+",",15,105);
-                    util.printFont(wlpmEnlight+" ",15,140);
+                    util.printFont(wlgg+" ",15,140);
                     util.printFont("批次号:"+qrCodeUtil.getScpc(),15,185);
                     util.printFont("条码编号:"+qrCodeUtil.getTmxh(),15,235);
                     util.printQRCode(qrCode,340,55,6);

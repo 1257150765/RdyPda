@@ -24,7 +24,11 @@ public class SbljAdapter extends BaseRecyclerAdapter<SbljAdapter.ViewHolder,Map<
     private Context context;
     private com.rdypda.view.viewinterface.OnItemClickListener onItemClickListener;
 
-    public SbljAdapter(Context context,int resources,List<Map<String, String>> mDataList) {
+    public void setOnItemClickListener(com.rdypda.view.viewinterface.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public SbljAdapter(Context context, int resources, List<Map<String, String>> mDataList) {
         super(mDataList);
         this.context=context;
         this.resources=resources;

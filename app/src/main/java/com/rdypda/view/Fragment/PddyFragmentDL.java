@@ -66,6 +66,8 @@ public class PddyFragmentDL extends Fragment {
     private String qrCode;
     private String wlpmChinese;
     private String wlpmEnlight;
+    private String wlgg = "";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,7 +98,7 @@ public class PddyFragmentDL extends Fragment {
                 iPddyView.getBarCode(edWlbh.getText().toString(),etScpc.getText().toString(),etBzsl.getText().toString(),strDw,mapKw);
                 break;
             case R.id.btn_print_fragment_dl:
-                iPddyView.printEvent(qrCode,wlpmChinese,wlpmEnlight);
+                iPddyView.printEvent(qrCode,wlpmChinese,wlpmEnlight,wlgg);
                 break;
             case R.id.btn_query_wlbh_fragment_dl:
                 iPddyView.queryWlbh(edWlbh.getText().toString().trim());
@@ -115,6 +117,7 @@ public class PddyFragmentDL extends Fragment {
             strDw = wlbhData.get(0).get("itm_unit");
             wlpmChinese = wlbhData.get(0).get("itm_wlpm");
             wlpmEnlight = wlbhData.get(0).get("itm_ywwlpm");
+            wlgg = wlbhData.get(0).get("itm_wlgg");
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), 3);
@@ -127,6 +130,7 @@ public class PddyFragmentDL extends Fragment {
                 strDw = wlbhData.get(which).get("itm_unit");
                 wlpmChinese = wlbhData.get(which).get("itm_wlpm");
                 wlpmEnlight = wlbhData.get(which).get("itm_ywwlpm");
+                wlgg = wlbhData.get(0).get("itm_wlgg");
                 dialog.dismiss();
             }
         });

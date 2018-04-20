@@ -48,6 +48,7 @@ public class LlddrMsgActivity extends BaseActivity implements ILlddrMsgView{
     private AlertDialog msgDialog;
     private LlddrMsgPresenter presenter;
     private ProgressDialog progressDialog;
+    private String wlgg = "";
 
 
     @Override
@@ -96,6 +97,8 @@ public class LlddrMsgActivity extends BaseActivity implements ILlddrMsgView{
         ywwlpmStr=getIntent().getStringExtra("ywwlpm");
         xqslStr=getIntent().getStringExtra("xqsl");
         wfslStr=getIntent().getStringExtra("wfsl");
+        wlgg=getIntent().getStringExtra("wlgg");
+
         wlbhText.setText(wlbhStr);
         wfslText.setText(wfslStr);
         xqslText.setText(xqslStr);
@@ -106,7 +109,7 @@ public class LlddrMsgActivity extends BaseActivity implements ILlddrMsgView{
     public void onClick(View view){
         switch (view.getId()){
             case R.id.print_btn:
-                presenter.printEven(wlbhStr,wlpmStr,ywwlpmStr,tmxhText.getText().toString(),tmpchEd.getText().toString());
+                presenter.printEven(wlbhStr,wlpmStr,ywwlpmStr,tmxhText.getText().toString(),tmpchEd.getText().toString(),wlgg);
                 break;
             case R.id.setting_btn:
                 showBlueToothAddressDialog();

@@ -33,6 +33,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 
 public class WebService {
+    private static boolean isDebug = false;
     public static String URL="http://yun.ruiduoyi.com:8080/Service.asmx/";
     //public static String URL="http://192.168.213.62:8080/Service.asmx/";
     public static Retrofit retrofit;
@@ -105,7 +106,10 @@ public class WebService {
     }
 
     public static Observable<JSONObject> querySqlCommandJson(final String sqlCommand, final String cTokenUser){
-        Log.e("querySqlCommandJson",sqlCommand+"\n"+cTokenUser);
+        if (isDebug){
+            Log.e("querySqlCommandJson",sqlCommand+"\n"+cTokenUser);
+        }
+
         return Observable.create(new ObservableOnSubscribe<JSONObject>() {
             @Override
             public void subscribe(ObservableEmitter<JSONObject> e) throws Exception {
@@ -121,7 +125,9 @@ public class WebService {
     }
 
     public static Observable<JSONObject> doQuerySqlCommandResultJson(final String sqlCommand, final String cTokenUser){
-        Log.e("querySqlCommandJson",sqlCommand+"\n"+cTokenUser);
+        if (isDebug) {
+            Log.e("querySqlCommandJson", sqlCommand + "\n" + cTokenUser);
+        }
         return Observable.create(new ObservableOnSubscribe<JSONObject>() {
             @Override
             public void subscribe(ObservableEmitter<JSONObject> e) throws Exception {
@@ -261,7 +267,10 @@ public class WebService {
         String format_1=result.replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<string xmlns=\"http://zblog.vicp.net/\">","");
         String format_2=format_1.replace("</string>","");
         String format_3=format_2.replace("\\t","    ");
-        Log.e("format",format_3);
+        if (isDebug){
+            Log.e("format",format_3);
+        }
+
         return new JSONObject(format_3);
     }
 

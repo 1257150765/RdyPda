@@ -14,7 +14,7 @@ public interface IPddyView {
     void setShowProgressDialogEnable(boolean enable);
 
 
-    void printEvent(String qrCode, String wlpmChinese, String wlpmEnlight);
+    void printEvent(String qrCode, String wlpmChinese, String wlpmEnlight, String wlgg);
 
     void queryWlbh(String wlbh);
 

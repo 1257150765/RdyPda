@@ -7,10 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -281,10 +278,11 @@ public class PddyActivity extends BaseActivity implements IPddyView {
      * @param qrCode
      * @param wlpmChinese
      * @param wlpmEnlight
+     * @param wlgg
      */
     @Override
-    public void printEvent(String qrCode, String wlpmChinese, String wlpmEnlight) {
-        presenter.printEvent(qrCode,wlpmChinese,wlpmEnlight);
+    public void printEvent(String qrCode, String wlpmChinese, String wlpmEnlight, String wlgg) {
+        presenter.printEvent(qrCode,wlpmChinese,wlpmEnlight,wlgg);
     }
     /**
      * 混料打印

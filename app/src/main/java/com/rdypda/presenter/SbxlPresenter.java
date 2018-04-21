@@ -113,9 +113,9 @@ public class SbxlPresenter extends BasePresenter {
                     tmslText.setText(map.get("tmsl"));
                     trzsText.setText(map.get("trzs"));*/
                     map.put("tmbh",tmbh);
-                    map.put("ylbh",tmbh);
-                    map.put("ylgg",tmbh);
-                    map.put("tmsl",tmbh);
+                    map.put("ylbh",ylbh);
+                    map.put("ylgg",ylgg);
+                    map.put("tmsl",tmsl);
                     view.onSMTLSucceed(map);
                 } catch (JSONException e) {
                     e.printStackTrace();

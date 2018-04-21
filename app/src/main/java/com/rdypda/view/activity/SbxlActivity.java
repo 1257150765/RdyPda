@@ -53,7 +53,7 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
     private boolean hadUpload;
-    private  AlertDialog msgDilaog;
+
     public static int START_TYPE_SBXL = 0,
             START_TYPE_SYTL = 1,
             START_TYPE_ZZTL = 2;
@@ -159,24 +159,24 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
     }
 
     private void showSMTL(final Map<String,String> map) {
-        View view= LayoutInflater.from(this).inflate(R.layout.dialog_sbtl,null);
-        if (msgDilaog == null) {
-            msgDilaog = new AlertDialog.Builder(this)
-                    .setView(view)
-                    .setCancelable(false)
-                    .create();
+        View view= LayoutInflater.from(this).inflate(R.layout.dialog_sbxl_smtl,null);
+        final AlertDialog  msgDilaog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(false)
+                .create();
+
+        if (msgDilaog.isShowing()){
+            msgDilaog.dismiss();
+            msgDilaog.show();
         }
         msgDilaog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         final EditText tmbhText=(EditText)view.findViewById(R.id.tmbh);
         TextView ylbhText=(TextView)view.findViewById(R.id.ylbh);
         TextView ylggText=(TextView)view.findViewById(R.id.ylgg);
         TextView tmslText=(TextView)view.findViewById(R.id.tmsl);
-        TextView trzsText=(TextView)view.findViewById(R.id.trzs);
         PowerButton queryTmbh = view.findViewById(R.id.btn_query_tmbh_dialog_sbtl);
-        queryTmbh.setVisibility(View.VISIBLE);
-        final EditText bzslEd=(EditText)view.findViewById(R.id.bzsl);
         final PowerButton jlBtn=(PowerButton)view.findViewById(R.id.jl__btn);
-        jlBtn.setText("确认");
+
         PowerButton cancelBtn=(PowerButton)view.findViewById(R.id.cancel_btn);
         tmbhText.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -189,22 +189,20 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
         ylbhText.setText(map.get("ylbh"));
         ylggText.setText(map.get("ylgg"));
         tmslText.setText(map.get("tmsl"));
-        //trzsText.setText(map.get("trzs"));
-        trzsText.setVisibility(View.GONE);
-        bzslEd.setText(map.get("tmsl"));
         queryTmbh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.isValidCode(tmbhText.getText().toString().trim());
+                msgDilaog.dismiss();
             }
         });
         jlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if ("".equals(lbm_lbdm)){
-                    showMsgDialog("请先验证");
+                if ("".equals(map.get("ylgg"))){
+                    showMsgDialog("请先验证条码编号");
                     return;
-                }*/
+                }
                 //presenter.tlSure(tmbh,bzslEd.getText().toString(),tmsl);
                 presenter.sureSMTl(map.get("tmbh"));
                 msgDilaog.dismiss();

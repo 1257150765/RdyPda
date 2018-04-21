@@ -247,8 +247,7 @@ public class SbtlActivity extends BaseActivity implements ISbtlView {
                 .setCancelable(false)
                 .create();
         msgDilaog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        EditText tmbhText=(EditText)view.findViewById(R.id.tmbh);
-        tmbhText.setEnabled(false);
+        TextView tmbhText=(TextView)view.findViewById(R.id.tmbh);
         TextView ylbhText=(TextView)view.findViewById(R.id.ylbh);
         TextView ylggText=(TextView)view.findViewById(R.id.ylgg);
         TextView tmslText=(TextView)view.findViewById(R.id.tmsl);

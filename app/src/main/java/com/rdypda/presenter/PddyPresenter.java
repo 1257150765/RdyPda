@@ -386,10 +386,6 @@ public class PddyPresenter extends BasePresenter{
                 try {
                     Map<String,String> map = new HashMap<>();
                     String[] item=value.getJSONArray("Table1").getJSONObject(0).getString("cRetMsg").split(":");
-                    map.put("hl_wldm",value.getJSONArray("Table1").getJSONObject(0).getString("hl_wldm"));
-                    map.put("hl_szdm",value.getJSONArray("Table1").getJSONObject(0).getString("hl_szdm"));
-                    map.put("hl_wlgg",value.getJSONArray("Table1").getJSONObject(0).getString("hl_wlgg"));
-                    map.put("hl_szgg",value.getJSONArray("Table1").getJSONObject(0).getString("hl_szgg"));
                     if (item.length>1){
                         String[]itemItem=item[1].split(";");
                         if (itemItem.length>1){
@@ -398,10 +394,16 @@ public class PddyPresenter extends BasePresenter{
                             view.onGetHLBarCodeSucceed(map);
                         }else {
                             view.setShowMsgDialogEnable(item[1]);
+                            return;
                         }
                     }else {
-                        view.setShowMsgDialogEnable("数据解析出错");
+                        view.setShowMsgDialogEnable(item[1]);
+                        return;
                     }
+                    map.put("hl_wldm",value.getJSONArray("Table1").getJSONObject(0).getString("hl_wldm"));
+                    map.put("hl_szdm",value.getJSONArray("Table1").getJSONObject(0).getString("hl_szdm"));
+                    map.put("hl_wlgg",value.getJSONArray("Table1").getJSONObject(0).getString("hl_wlgg"));
+                    map.put("hl_szgg",value.getJSONArray("Table1").getJSONObject(0).getString("hl_szgg"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     view.setShowMsgDialogEnable("Json数据解析出错");

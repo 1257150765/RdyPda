@@ -175,7 +175,7 @@ public class PddyDialog extends AlertDialog {
         //长按修改，视为检查过物料代码
         isCheckWlbh = true;
     }
-
+    
     public interface OnPddyAddListener {
         /**
          * 盘点打印监听器

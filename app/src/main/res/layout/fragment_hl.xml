@@ -51,7 +51,6 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:inputType="number"
                         android:id="@+id/et_scpc_fragment_hl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"></EditText>
@@ -89,7 +88,6 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:inputType="number"
                         android:id="@+id/et_bzsl_fragment_hl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"></EditText>

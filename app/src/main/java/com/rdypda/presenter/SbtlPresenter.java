@@ -265,7 +265,7 @@ public class SbtlPresenter extends BasePresenter {
             public void onSubscribe(Disposable d) {
 
             }
-            ////
+            //
             @Override
             public void onNext(JSONObject value) {
                 view.setShowProgressDialogEnable(false);
@@ -302,6 +302,8 @@ public class SbtlPresenter extends BasePresenter {
             public void onNext(JSONObject value) {
                 view.setShowProgressDialogEnable(false);
                 try {
+                    //table2，是所有已加料（显示原料代码）
+                    //table3，是扫描的料（显示条码）
                     JSONArray arrayZs=value.getJSONArray("Table2");
                     JSONArray arrayScan=value.getJSONArray("Table3");
                     List<Map<String,String>>dataScan=new ArrayList<>();

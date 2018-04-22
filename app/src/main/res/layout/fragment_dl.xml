@@ -135,7 +135,6 @@
                     android:background="@drawable/table_right_top"
                     android:orientation="horizontal">
                     <EditText
-                        android:inputType="date"
                         android:id="@+id/et_scpc_fragment_dl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -177,7 +176,6 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:inputType="number"
                         android:id="@+id/et_bzsl_fragment_dl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

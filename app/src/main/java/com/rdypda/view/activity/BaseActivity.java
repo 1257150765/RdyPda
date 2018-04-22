@@ -14,7 +14,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Animation anim;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); 
         anim= AnimationUtils.loadAnimation(this, R.anim.btn_apha);
     }
 

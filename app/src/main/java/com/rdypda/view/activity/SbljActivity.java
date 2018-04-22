@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import com.example.liangmutian.airrecyclerview.swipetoloadlayout.BaseRecyclerAdapter;
 import com.rdypda.R;
 import com.rdypda.adapter.SbljAdapter;
 import com.rdypda.presenter.SbljPresenter;
@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SbljActivity extends BaseActivity implements ISbljView{
+public class SbljActivity extends BaseActivity implements ISbljView ,com.rdypda.view.viewinterface.OnItemClickListener {
     private SbljPresenter presenter;
     private AlertDialog dialog;
     private ProgressDialog progressDialog;
@@ -125,6 +125,7 @@ public class SbljActivity extends BaseActivity implements ISbljView{
     public void refreshSblj(List<Map<String, String>> data) {
         SbljAdapter adapter=new SbljAdapter(SbljActivity.this,R.layout.item_sblj,data);
         sbljList.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
         sbljList.setLayoutManager(new GridLayoutManager(SbljActivity.this,1));
     }
 
@@ -177,5 +178,67 @@ public class SbljActivity extends BaseActivity implements ISbljView{
     protected void onDestroy() {
         presenter.closeScanUtil();
         super.onDestroy();
+    }
+
+
+
+    @Override
+    public void onItemClick(int position, Map<String, String> map, BaseRecyclerAdapter.BaseRecyclerViewHolder holder) {
+        //ybdkl,已绑定烤炉
+        final android.app.AlertDialog.Builder disConnectDeviceBuilder = new android.app.AlertDialog.Builder(this, 3);
+        android.app.AlertDialog.Builder showConnectDeviceBuilder = new android.app.AlertDialog.Builder(this, 3);
+
+        final String jtbh = map.get("jtbh");
+        final String jtmc = map.get("jtmc");
+        final String ybdklStr = map.get("ybdkl");
+        if ("".equals(ybdklStr)){
+            return;
+        }
+        final String[] ybdkls = ybdklStr.split(",");
+        if (ybdkls.length == 1){
+            disConnectDeviceBuilder.setTitle("警告");
+            disConnectDeviceBuilder.setMessage("你是否要解除"+jtmc+"与"+ybdklStr+"的连接");
+            disConnectDeviceBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    presenter.disConnectDevice(jtbh, ybdklStr);
+                    dialog.dismiss();
+                }
+            });
+            disConnectDeviceBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            disConnectDeviceBuilder.create().show();
+        }else {
+            showConnectDeviceBuilder.setTitle("请选择需要解除的烤炉");
+            showConnectDeviceBuilder.setItems(ybdkls, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, final int which) {
+                    disConnectDeviceBuilder.setTitle("警告");
+                    disConnectDeviceBuilder.setMessage("你是否要解除"+jtmc+"与"+ybdkls[which]+"的连接");
+                    disConnectDeviceBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which2) {
+                            presenter.disConnectDevice(jtbh,ybdkls[which]);
+                            dialog.dismiss();
+                        }
+                    });
+                    disConnectDeviceBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.dismiss();
+                    disConnectDeviceBuilder.create().show();
+                }
+            });
+            showConnectDeviceBuilder.create().show();
+        }
+
+
     }
 }

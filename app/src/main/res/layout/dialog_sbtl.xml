@@ -46,13 +46,32 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:background="@drawable/table_right_top">
-                    <TextView
-                        android:id="@+id/tmbh"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        />
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/tmbh"
+                            android:layout_width="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            />
+                        <LinearLayout
+                            android:layout_gravity="right|center_vertical"
+                            android:background="@color/color_kcpd_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <com.rdypda.view.widget.PowerButton
+                                android:visibility="gone"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:id="@+id/btn_query_tmbh_dialog_sbtl"
+                                android:background="@drawable/query"/>
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

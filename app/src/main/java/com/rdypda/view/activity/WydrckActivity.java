@@ -131,7 +131,6 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         switch (view.getId()) {
             case R.id.tm_sure_btn:
                 presenter.isValidCode(tmbhEd.getText().toString());
-
                 break;
             case R.id.gd_sure_btn:
                 presenter.isValidGDH(gdhEd.getText().toString());

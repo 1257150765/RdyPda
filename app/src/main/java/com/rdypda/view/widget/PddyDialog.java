@@ -81,9 +81,9 @@ public class PddyDialog extends AlertDialog {
             //取消
             case R.id.pbtn_cancel_dialog_pddy_add:
                 dismiss();
-                if (mOnPddyAddListener != null){
+                /*if (mOnPddyAddListener != null){
                     mOnPddyAddListener.onPaddyAddListener(false,wlType,edWlbh.getText().toString(),tvWlgg.getText().toString(),edWlbl.getText().toString(),data.get("itm_unit"));
-                }
+                }*/
 
                 break;
             //确定

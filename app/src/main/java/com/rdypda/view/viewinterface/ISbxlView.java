@@ -30,4 +30,7 @@ public interface ISbxlView {
 
     void showToastMsg(String msg);
 
+    void setLbdm(String lbm_lbdm);
+
+    void onSMTLSucceed(Map<String, String> map);
 }

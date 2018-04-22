@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.rdypda.model.network.WebService;
 import com.rdypda.util.PrinterUtil;
+import com.rdypda.util.QrCodeUtil;
 import com.rdypda.util.ScanUtil;
 import com.rdypda.view.activity.SbtlActivity;
 import com.rdypda.view.activity.SbxlActivity;
@@ -36,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class SbxlPresenter extends BasePresenter {
+    public static final int SMTL = 3;
     private ISbxlView view;
     private String date;
     private ScanUtil scanUtil;
@@ -46,6 +48,7 @@ public class SbxlPresenter extends BasePresenter {
     private String printMsg="";
     private String sbbh="";
     public int HLS=0,HL=1;
+    private int scanType = 0;
 
 
     public SbxlPresenter(Context context,ISbxlView view) {
@@ -56,6 +59,10 @@ public class SbxlPresenter extends BasePresenter {
         scanUtil.setOnScanListener(new ScanUtil.OnScanListener() {
             @Override
             public void onSuccess(String result) {
+                if (scanType == SMTL){
+                    isValidCode(new QrCodeUtil(result).getTmxh());
+                    return;
+                }
                 if (startType==SbxlActivity.START_TYPE_ZZTL|startType==SbxlActivity.START_TYPE_SYTL){
                     isValidDevice(result);
                 }else if (startType==SbxlActivity.START_TYPE_SBXL){
@@ -70,6 +77,64 @@ public class SbxlPresenter extends BasePresenter {
         });
         getKc();
         getScrq();
+    }
+
+    public void isValidCode(String tmxh) {
+        if (sbbh.equals("")){
+            view.showMsgDialog("设备编号不能为空！");
+            return;
+        }
+        view.setShowProgressDialogEnable(true);
+        String sql=String.format("Call Proc_PDA_IsValidCode('%s','MTR_XL','%s','%s');",tmxh,sbbh,preferenUtil.getString("userId"));
+        WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(JSONObject value) {
+                view.setShowProgressDialogEnable(false);
+                try {
+                    JSONArray array=value.getJSONArray("Table2");
+                    Map<String,String> map = new HashMap<>();
+                    //条码序号
+                    String tmbh=array.getJSONObject(0).getString("brp_Sn");
+                    //物料代码
+                    String ylbh=array.getJSONObject(0).getString("brp_wldm");
+                    //品名规格
+                    String ylgg=array.getJSONObject(0).getString("brp_pmgg");
+                    //条码数量
+                    String tmsl=array.getJSONObject(0).getString("brp_Qty");
+                    //getTlzs(tmbh,ylbh,ylgg,tmsl);
+                    /*tmbhText.setText(map.get("tmbh"));
+                    ylbhText.setText(map.get("ylbh"));
+                    ylggText.setText(map.get("ylgg"));
+                    tmslText.setText(map.get("tmsl"));
+                    trzsText.setText(map.get("trzs"));*/
+                    map.put("tmbh",tmbh);
+                    map.put("ylbh",ylbh);
+                    map.put("ylgg",ylgg);
+                    map.put("tmsl",tmsl);
+                    view.onSMTLSucceed(map);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    view.showMsgDialog(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                view.setShowProgressDialogEnable(false);
+                view.showMsgDialog(e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     public void isValidDevice(final String sbbh){
@@ -98,10 +163,11 @@ public class SbxlPresenter extends BasePresenter {
                 try {
                     JSONArray array=value.getJSONArray("Table1");
                     if (array.length()==1){
-                        SbxlPresenter.this.sbbh=sbbh;
+                        //SbxlPresenter.this.sbbh=sbbh;
                         SbxlPresenter.this.sbbh=array.getJSONObject(0).getString("lbm_lbdm");
+                        view.setLbdm(array.getJSONObject(0).getString("lbm_lbdm"));
                         view.setSbbhText(array.getJSONObject(0).getString("lbm_lbmc"));
-                        getScanList(sbbh);
+                        getScanList(SbxlPresenter.this.sbbh);
                         view.showMsgDialog("验证成功！");
 
                     }else if (array.length()>1){
@@ -233,7 +299,7 @@ public class SbxlPresenter extends BasePresenter {
                         Map<String,String>map=new HashMap<>();
                         map.put("ylgg",arrayZs.getJSONObject(i).getString("tld_wldm"));
                         map.put("yldm",arrayZs.getJSONObject(i).getString("tld_wldm"));
-                        map.put("sbbh",arrayZs.getJSONObject(i).getString("itm_wlpm"));
+                        map.put("sbbh",arrayZs.getJSONObject(i).getString("tld_devid"));
                         map.put("zjls",arrayZs.getJSONObject(i).getString("tld_tlsl"));
                         map.put("yjys",arrayZs.getJSONObject(i).getString("tld_sysl"));
                         map.put("szgg",arrayZs.getJSONObject(i).getString("tld_szmc"));
@@ -594,5 +660,75 @@ public class SbxlPresenter extends BasePresenter {
 
     public String getFtyIdAndstkId() {
         return ftyIdAndstkId;
+    }
+
+    public void setScanType(int scanType) {
+        this.scanType = scanType;
+    }
+
+    public void sureSMTl(String tmbh) {
+        if ("".equals(sbbh)){
+            view.showMsgDialog("设备编号不能为空");
+            return;
+        }
+        view.setShowProgressDialogEnable(true);
+        String sql=String.format("Call Proc_PDA_Barcode_XL('%s', '%s', '%s');",sbbh,tmbh,preferenUtil.getString("userId"));
+        WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(JSONObject value) {
+                view.setShowProgressDialogEnable(false);
+                getScanList(sbbh);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                view.setShowProgressDialogEnable(false);
+                view.showToastMsg(e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    public void wlxl(String yldm) {
+        if ("".equals(sbbh)){
+            view.showMsgDialog("设备编号不能为空");
+            return;
+        }
+        view.setShowProgressDialogEnable(true);
+        String sql=String.format("Call Proc_PDA_wldm_XL('%s', '%s', '%s');",sbbh,yldm,preferenUtil.getString("userId"));
+        WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(JSONObject value) {
+                view.setShowProgressDialogEnable(false);
+                getScanList(sbbh);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                view.setShowProgressDialogEnable(false);
+                view.showToastMsg(e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

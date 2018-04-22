@@ -148,4 +148,33 @@ public class SbljPresenter extends BasePresenter{
         scanUtil.close();
     }
 
+    public void disConnectDevice(final String jtbh, String ybdkl) {
+        view.setShowProgressDialogEnable(true);
+        String sql=String.format("Call Proc_PDA_Jtm_Dev_Unbind('%s', '%s', '%s');",jtbh,ybdkl,preferenUtil.getString("userId"));
+        WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(JSONObject value) {
+                view.setShowProgressDialogEnable(false);
+                view.showMsgDialog("操作成功！");
+                getConnectedDevice("");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                view.setShowProgressDialogEnable(false);
+                view.showMsgDialog(e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
 }

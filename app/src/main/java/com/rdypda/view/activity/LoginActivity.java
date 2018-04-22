@@ -134,8 +134,9 @@ public class LoginActivity extends BaseActivity implements ILoginView {
                 presenter.login(factoryPosition,userIdEd.getText().toString(),userPwdEd.getText().toString());
                 break;
             case R.id.setting_btn:
-                currentIpText.setText("当前服务器地址："+presenter.getCurrentIp());
                 ipSettingDialog.show();
+                currentIpText.setText("当前服务器地址："+presenter.getCurrentIp());
+
                 break;
         }
     }

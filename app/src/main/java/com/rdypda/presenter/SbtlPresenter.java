@@ -215,6 +215,7 @@ public class SbtlPresenter extends BasePresenter {
                     }else {
                         view.showScanDialog(tmbh,ylbh,ylgg,tmsl,"0");
                     }
+                    view.setWltmText("");
                 } catch (JSONException e) {
                     e.printStackTrace();
                     view.showScanDialog(tmbh,ylbh,ylgg,tmsl,"0");

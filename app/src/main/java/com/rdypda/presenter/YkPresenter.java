@@ -137,6 +137,7 @@ public class YkPresenter extends BasePresenter {
                     mapZs.put("wlgg",array.getJSONObject(0).getString("brp_pmgg"));
                     view.addScanData(mapScan);
                     view.addZsData(mapZs);
+                    view.setTmEd("");
                 } catch (JSONException e) {
                     e.printStackTrace();
                     view.showMsgDialog(e.getMessage());

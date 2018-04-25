@@ -24,10 +24,13 @@ import android.widget.Toast;
 import com.rdypda.R;
 import com.rdypda.adapter.SbtlScanAdapter;
 import com.rdypda.adapter.SbtlZsAdapter;
+import com.rdypda.model.cache.PreferenUtil;
 import com.rdypda.presenter.SbtlPresenter;
+import com.rdypda.util.SharePreferenceUtil;
 import com.rdypda.view.viewinterface.ISbtlView;
 import com.rdypda.view.widget.PowerButton;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,12 +65,15 @@ public class SbtlActivity extends BaseActivity implements ISbtlView {
     RadioButton tmRadio;
     @BindView(R.id.sp_title)
     TextView spTitleText;
+    private Map<String,String> wlMap;
+    SharePreferenceUtil preferenUtil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sbtl);
         ButterKnife.bind(this);
         initView();
+        preferenUtil = new SharePreferenceUtil(SbtlActivity.this);
         presenter=new SbtlPresenter(this,this);
         presenter.setStartType(startType);
     }
@@ -255,22 +261,38 @@ public class SbtlActivity extends BaseActivity implements ISbtlView {
         final EditText bzslEd=(EditText)view.findViewById(R.id.bzsl);
         PowerButton jlBtn=(PowerButton)view.findViewById(R.id.jl__btn);
         PowerButton cancelBtn=(PowerButton)view.findViewById(R.id.cancel_btn);
+        //如果扫描新的物料，上一次的物料默认全投料
+        wlMap = preferenUtil.getWl();
+        if (wlMap !=null){
+            presenter.tlSure(wlMap.get(SharePreferenceUtil.DATA_TYPE_WL_TMBH),wlMap.get(SharePreferenceUtil.DATA_TYPE_WL_BZSL),wlMap.get(SharePreferenceUtil.DATA_TYPE_WL_TMSL));
+            preferenUtil.clear();
+        }
         tmbhText.setText(tmbh);
         ylbhText.setText(ylbh);
         ylggText.setText(ylgg);
         tmslText.setText(tmsl);
         trzsText.setText(trzs);
         bzslEd.setText(tmsl);
+        //每次扫描后都需要保存到本地，用来处理扫描了，但是不点加料也不点取消的情况
+        Map<String,String> map = new HashMap<>();
+        map.put(SharePreferenceUtil.DATA_TYPE_WL_TMBH,tmbh);
+        map.put(SharePreferenceUtil.DATA_TYPE_WL_BZSL,tmsl);
+        map.put(SharePreferenceUtil.DATA_TYPE_WL_TMSL,tmsl);
+        preferenUtil.saveWl(map);
         jlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.tlSure(tmbh,bzslEd.getText().toString(),tmsl);
                 msgDilaog.dismiss();
+                //点了加料就需要清除掉
+                preferenUtil.clear();
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //点了取消就需要清除掉
+                preferenUtil.clear();
                 presenter.cancelScan(tmbh,msgDilaog);
             }
         });

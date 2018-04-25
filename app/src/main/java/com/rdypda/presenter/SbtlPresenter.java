@@ -172,7 +172,6 @@ public class SbtlPresenter extends BasePresenter {
                     view.showMsgDialog(e.getMessage());
                 }
             }
-
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
@@ -264,7 +263,7 @@ public class SbtlPresenter extends BasePresenter {
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                
             }
             //
             @Override

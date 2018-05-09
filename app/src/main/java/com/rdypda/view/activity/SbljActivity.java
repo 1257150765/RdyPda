@@ -181,20 +181,27 @@ public class SbljActivity extends BaseActivity implements ISbljView ,com.rdypda.
     }
 
 
-
+    /**
+     * 点击解除绑定
+     * @param position
+     * @param map
+     * @param holder
+     */
     @Override
     public void onItemClick(int position, Map<String, String> map, BaseRecyclerAdapter.BaseRecyclerViewHolder holder) {
         //ybdkl,已绑定烤炉
         final android.app.AlertDialog.Builder disConnectDeviceBuilder = new android.app.AlertDialog.Builder(this, 3);
         android.app.AlertDialog.Builder showConnectDeviceBuilder = new android.app.AlertDialog.Builder(this, 3);
-
         final String jtbh = map.get("jtbh");
         final String jtmc = map.get("jtmc");
         final String ybdklStr = map.get("ybdkl");
+        //如果没有绑定的设备则不显示
         if ("".equals(ybdklStr)){
             return;
         }
+
         final String[] ybdkls = ybdklStr.split(",");
+        //如果有一台设备已连接，则直接显示是否解除
         if (ybdkls.length == 1){
             disConnectDeviceBuilder.setTitle("警告");
             disConnectDeviceBuilder.setMessage("你是否要解除"+jtmc+"与"+ybdklStr+"的连接");
@@ -213,10 +220,12 @@ public class SbljActivity extends BaseActivity implements ISbljView ,com.rdypda.
             });
             disConnectDeviceBuilder.create().show();
         }else {
+            //如果有多台设备已连接，则显示所有已连接的设备
             showConnectDeviceBuilder.setTitle("请选择需要解除的烤炉");
             showConnectDeviceBuilder.setItems(ybdkls, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, final int which) {
+                    //点击解除连接
                     disConnectDeviceBuilder.setTitle("警告");
                     disConnectDeviceBuilder.setMessage("你是否要解除"+jtmc+"与"+ybdkls[which]+"的连接");
                     disConnectDeviceBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {

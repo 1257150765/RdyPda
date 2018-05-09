@@ -74,6 +74,7 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
     @BindView(R.id.sbbh_text)
     TextView sbbhText;
     private String lbm_lbdm;
+    private String tips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,18 +118,22 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
                 actionBar.setTitle("设备下料");
                 sbbhText.setText("设备编号：");
                 sbbhEd.setHint("请输入设备编号");
+                tips = "清料后会将料筒已投料数据清除，但余料不会自动回仓。";
+
                 break;
             case 1:
                 actionBar.setTitle("丝印退料");
                 sbbhText.setText("型号&品名：");
                 sbbhEd.setHint("请输入型号&品名");
                 hlBtn.setVisibility(View.GONE);
+                tips = "清料后表示投料全部用完，无余数";
                 break;
             case 2:
                 actionBar.setTitle("组装退料");
                 sbbhText.setText("线别：");
                 sbbhEd.setHint("请输入线别");
                 hlBtn.setVisibility(View.GONE);
+                tips = "清料后表示投料全部用完，无余数";
                 break;
         }
 
@@ -474,9 +479,10 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
             showMsgDialog("请先输入并验证设备");
             return;
         }
+
         AlertDialog clearDialog = new AlertDialog.Builder(SbxlActivity.this)
                 .setTitle("提示")
-                .setMessage("确认" + sbbh + "清料吗？\n清料后会将料筒已投料数据清除，但余料不会自动回仓。")
+                .setMessage("确认" + sbbh + "清料吗？\n"+tips)
                 .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

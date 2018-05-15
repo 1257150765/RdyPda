@@ -34,8 +34,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class WebService {
     private static boolean isDebug = true;
-    //public static String URL="http://yun.ruiduoyi.com:8080/Service.asmx/";
-    public static String URL="http://192.168.213.62:8080/Service.asmx/";
+    public static String URL="http://yun.ruiduoyi.com:8080/Service.asmx/";
+    //public static String URL="http://192.168.213.62:8080/Service.asmx/";
     public static Retrofit retrofit;
     public static  ServiceApi serviceApi;
     public static OkHttpClient okHttpClient;
@@ -56,7 +56,6 @@ public class WebService {
                     readTimeout(5, TimeUnit.SECONDS).
                     writeTimeout(5, TimeUnit.SECONDS).build();
         }
-
         return okHttpClient;
     }
 

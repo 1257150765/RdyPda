@@ -1,17 +1,25 @@
 package com.rdypda.view.activity;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +34,11 @@ import com.rdypda.R;
 import com.rdypda.adapter.MainAdapter;
 import com.rdypda.model.cache.PreferenUtil;
 import com.rdypda.presenter.MainPresenter;
+import com.rdypda.util.DownloadService;
 import com.rdypda.view.viewinterface.IMainView;
 import com.rdypda.view.widget.MyExpandableListView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +51,7 @@ import cn.bingoogolapple.bgabanner.BGABannerUtil;
 
 public class MainActivity extends BaseActivity implements IMainView{
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private MainPresenter presenter;
     /**
      * 权限列表
@@ -67,7 +78,7 @@ public class MainActivity extends BaseActivity implements IMainView{
     TextView userNameText;
     @BindView(R.id.expanded_menu)
     MyExpandableListView expandableListView;
-
+    BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,8 +185,28 @@ public class MainActivity extends BaseActivity implements IMainView{
         downloadDialog=new AlertDialog.Builder(this).setTitle("提示").setMessage("发现新的版本，是否现在下载更新").setNegativeButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                presenter.downloadInstallApk(url);
+                //presenter.downloadInstallApk(url);
                 //Toast.makeText(MainActivity.this,"已创建下载任务",Toast.LENGTH_SHORT).show();
+                receiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        long data = intent.getLongExtra(DownloadService.EXTENDED_DATA_STATUS,0L);
+                        long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                        intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/RdyPDA.apk")),
+                                "application/vnd.android.package-archive");
+                        context.startActivity(intent);
+                        finish();
+                    }
+                };
+                LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(receiver, new IntentFilter(DownloadService.BROADCAST_ACTION));
+                //MainActivity.this.registerReceiver(receiver,new IntentFilter(DownloadService.BROADCAST_ACTION));
+                Intent serviceIntent = new Intent(MainActivity.this,DownloadService.class);
+                //将下载地址url放入intent中
+                serviceIntent.setData(Uri.parse(url.trim()));
+                Log.d(TAG, "onClick: "+Uri.parse(url));
+                startService(serviceIntent);
             }
         }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -185,6 +216,7 @@ public class MainActivity extends BaseActivity implements IMainView{
         }).create();
         downloadDialog.show();
     }
+
 
     @Override
     public void showToastMsg(String msg) {
@@ -284,5 +316,8 @@ public class MainActivity extends BaseActivity implements IMainView{
     protected void onDestroy() {
         super.onDestroy();
         presenter.closeTimer();
+        if (receiver != null){
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        }
     }
 }

@@ -82,8 +82,6 @@ public class WldActivity extends BaseActivity implements IWldView{
                 presenter.getLldDet(djbh,wldm);
             }
         };
-
-
         IntentFilter intentFilter=new IntentFilter();
         intentFilter.addAction("com.rdypda.UPDATEWLD");
         registerReceiver(receiver,intentFilter);

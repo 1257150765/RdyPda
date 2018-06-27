@@ -152,7 +152,7 @@ public class PddyFragmentDL extends Fragment {
                 if (position == 0){
                     mapKw = null;
                 }else {
-                    mapKw = data.get(position);
+                    mapKw = data.get(position-1);
                 }
 
             }

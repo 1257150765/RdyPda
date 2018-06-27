@@ -149,8 +149,6 @@ public class LlddrMsgPresenter extends BasePresenter{
                 view.setProgressDialogEnable("",false);
             }
         });
-
-
     }
 
     //发料

@@ -164,7 +164,7 @@ public class LlddrActivity extends BaseActivity implements ILlddrView{
             progressDialog.dismiss();
         }
     }
-    //
+
     @Override
     public boolean isFinishCheck() {
         return finishBox.isChecked();

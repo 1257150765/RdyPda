@@ -234,7 +234,7 @@ public class PddyFragmentHL extends Fragment implements PddyAdapter.OnItemLongCl
                 if (position == 0) {
                     mapKw = null;
                 } else {
-                    mapKw = data.get(position);
+                    mapKw = data.get(position-1);
                 }
             }
 

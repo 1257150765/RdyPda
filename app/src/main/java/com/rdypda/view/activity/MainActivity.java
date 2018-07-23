@@ -182,38 +182,40 @@ public class MainActivity extends BaseActivity implements IMainView{
 
     @Override
     public void showDownloadDialog(final String url) {
-        downloadDialog=new AlertDialog.Builder(this).setTitle("提示").setMessage("发现新的版本，是否现在下载更新").setNegativeButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //presenter.downloadInstallApk(url);
-                //Toast.makeText(MainActivity.this,"已创建下载任务",Toast.LENGTH_SHORT).show();
-                receiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        long data = intent.getLongExtra(DownloadService.EXTENDED_DATA_STATUS,0L);
-                        long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                        intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/RdyPDA.apk")),
-                                "application/vnd.android.package-archive");
-                        context.startActivity(intent);
-                        finish();
-                    }
-                };
-                LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(receiver, new IntentFilter(DownloadService.BROADCAST_ACTION));
-                //MainActivity.this.registerReceiver(receiver,new IntentFilter(DownloadService.BROADCAST_ACTION));
-                Intent serviceIntent = new Intent(MainActivity.this,DownloadService.class);
-                //将下载地址url放入intent中
-                serviceIntent.setData(Uri.parse(url.trim()));
-                Log.d(TAG, "onClick: "+Uri.parse(url));
-                startService(serviceIntent);
-            }
-        }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create();
+        if (downloadDialog == null) {
+            downloadDialog = new AlertDialog.Builder(this).setTitle("提示").setMessage("发现新的版本，是否现在下载更新").setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //presenter.downloadInstallApk(url);
+                    //Toast.makeText(MainActivity.this,"已创建下载任务",Toast.LENGTH_SHORT).show();
+                    receiver = new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            long data = intent.getLongExtra(DownloadService.EXTENDED_DATA_STATUS, 0L);
+                            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                            intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/RdyPDA.apk")),
+                                    "application/vnd.android.package-archive");
+                            context.startActivity(intent);
+                            finish();
+                        }
+                    };
+                    LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(receiver, new IntentFilter(DownloadService.BROADCAST_ACTION));
+                    //MainActivity.this.registerReceiver(receiver,new IntentFilter(DownloadService.BROADCAST_ACTION));
+                    Intent serviceIntent = new Intent(MainActivity.this, DownloadService.class);
+                    //将下载地址url放入intent中
+                    serviceIntent.setData(Uri.parse(url.trim()));
+                    Log.d(TAG, "onClick: " + Uri.parse(url));
+                    startService(serviceIntent);
+                }
+            }).setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create();
+        }
         downloadDialog.show();
     }
 

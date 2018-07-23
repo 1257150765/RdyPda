@@ -1,0 +1,469 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.rdypda.view.Fragment.TmxxFragment">
+    <!--滑动-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--包裹内容-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--物料编号-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="供应商代码" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <EditText
+                            android:id="@+id/ed_gysdm_cgrktmdyActivity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp" />
+                        <LinearLayout
+                            android:background="@color/color_kcpd_blue"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_height="wrap_content">
+                            <com.rdypda.view.widget.PowerButton
+                                android:visibility="gone"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:id="@+id/btn_query_gysdm_cgrktmdyActivity"
+                                android:background="@drawable/query"/>
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+            <!--包装数量-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="收货单号" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_shdh_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <!--包装数量-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="订单编号" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_ddbh_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <!--包装数量-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="备注" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:gravity="top"
+                        android:scrollbars="vertical"
+                        android:maxLines="10"
+                        android:inputType="textMultiLine"
+                        android:id="@+id/et_bz_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <!--物料编号-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="物料编号" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <EditText
+                            android:id="@+id/ed_wlbh_cgrktmdyActivity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp" />
+                        <LinearLayout
+                            android:background="@color/color_kcpd_blue"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_height="wrap_content">
+                            <com.rdypda.view.widget.PowerButton
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:id="@+id/btn_query_wlbh_cgrktmdyActivity"
+                                android:background="@drawable/query"/>
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+            <!--物料规格-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="物料规格" />
+                </LinearLayout>
+                <!--生产批次-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_wlgg_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="生产批次" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/et_scpc_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+            <!--包装数量-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="包装数量" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_bzsl_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <!--原料库位-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="原料库位" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/sp_ylkw_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--条码编号-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_left_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="条码编号" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/table_right_top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_tmbh_cgrktmdyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <Button
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/normal_textSize"
+                android:id="@+id/btn_getbarcode_cgrktmdyActivity"
+                android:text="获取条码编号"
+                android:layout_marginTop="20dp"
+                android:background="@color/color_kcpd_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_marginTop="1px"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/normal_textSize"
+                android:id="@+id/btn_print_cgrktmdyActivity"
+                android:text="打印"
+                android:background="@color/color_kcpd_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_marginTop="1px"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/normal_textSize"
+                android:id="@+id/btn_rk_cgrktmdyActivity"
+                android:text="入库"
+                android:background="@color/color_kcpd_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:background="@color/color_white"
+                android:layout_width="match_parent"
+                android:layout_height="2px" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

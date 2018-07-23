@@ -314,10 +314,12 @@ public class SbxlPresenter extends BasePresenter {
                         }
                         dataZs.add(map);
                     }
-                    if (dataZs.size()==1){
-                        getHldhs(hldh);
-                    }else if (dataZs.size()>1){
-                        getHldhs(hl);
+                    if (startType == SbxlActivity.START_TYPE_SBXL) {
+                        if (dataZs.size() == 1) {
+                            getHldhs(hldh);
+                        } else if (dataZs.size() > 1) {
+                            getHldhs(hl);
+                        }
                     }
                     view.refreshZsList(dataZs);
                     view.refreshScanList(dataScan);

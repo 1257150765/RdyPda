@@ -46,6 +46,8 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
     private WydrckZsAdapter zsAdapter;
     private int startType;
     public static final int START_TYPE_GDTH = 2;
+    public static final int START_TYPE_LLRKSM = 3;
+    public static final int START_TYPE_LLCKSM = 4;
     public static int START_TYPE_WYDCK = 1;
     public static int START_TYPE_WYDRK = 0;
     @BindView(R.id.toolbar)
@@ -123,6 +125,12 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
             kwText.setText("出库库位：");
             //如果是工单退货，显示工单号输入框
             llGdhContainer.setVisibility(View.VISIBLE);
+        }else if (startType == START_TYPE_LLRKSM){
+            actionBar.setTitle("来料入库扫描");
+            kwText.setText("接收储位：");
+        }else if (startType == START_TYPE_LLCKSM){
+            actionBar.setTitle("来料出库扫描");
+            kwText.setText("出库库位：");
         }
     }
 

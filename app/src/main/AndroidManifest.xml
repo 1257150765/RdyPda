@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rdypda"
     android:versionCode="3"
-    android:versionName="1.0.3.1">
+    android:versionName="1.0.6.1">
+
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -35,6 +36,7 @@
             android:theme="@style/FirstTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,9 +51,12 @@
         <activity android:name=".view.activity.SbljActivity" />
         <activity android:name=".view.activity.SbxlActivity" />
         <activity android:name=".view.activity.WydrckActivity" />
-        <activity android:name=".view.activity.YkActivity"></activity>
-        <activity android:name=".view.activity.PddyActivity"/>
-        <service android:name=".util.DownloadService"/>
+        <activity android:name=".view.activity.YkActivity" />
+        <activity android:name=".view.activity.PddyActivity" />
+
+        <service android:name=".util.DownloadService" />
+
+        <activity android:name=".view.activity.CgrktmdyActivity"></activity>
     </application>
 
 </manifest>

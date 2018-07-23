@@ -215,7 +215,8 @@ public class YljsflActivity extends BaseActivity implements IYljsflView{
                         }else if (getIntent().getIntExtra("startType",0)==MainPresenter.YLJS){
                             presenter.isValidCode(tmxh,"MTR_IN",presenter.getKcdd());
                         }
-                        presenter.isValidCode(tmxh,"",presenter.getKcdd());
+                        //重复请求了
+                        //presenter.isValidCode(tmxh,"",presenter.getKcdd());
                         deleteDialog.dismiss();
                     }
                 }

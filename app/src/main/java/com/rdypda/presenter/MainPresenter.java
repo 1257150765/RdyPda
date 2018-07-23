@@ -12,6 +12,7 @@ import android.widget.ExpandableListView;
 import com.rdypda.R;
 import com.rdypda.model.network.WebService;
 import com.rdypda.util.DownloadUtils;
+import com.rdypda.view.activity.CgrktmdyActivity;
 import com.rdypda.view.activity.HlActivity;
 import com.rdypda.view.activity.HlbzActivity;
 import com.rdypda.view.activity.PddyActivity;
@@ -79,6 +80,7 @@ public class MainPresenter extends BasePresenter{
         List<List<Integer>> imgs=new ArrayList<>();
         groupTitles.add("原料仓发料");
         groupTitles.add("原料组仓库");
+        groupTitles.add("仓库管理");
         groupTitles.add("混料与烤料");
         //groupTitles.add("注塑产品管理");
         groupTitles.add("组装发料退料");
@@ -119,6 +121,39 @@ public class MainPresenter extends BasePresenter{
 
         titles.add(ylzckArray);
         imgs.add(ylzckResources);
+
+        //仓库管理
+        List<String> ckArray = new ArrayList<>();
+        List<Integer> ckResources = new ArrayList<>();
+
+        if (isPermission("MTR601D1")){
+            ckArray.add("采购入库条码打印");
+            ckResources.add(R.drawable.cgrktmdy);
+        }
+
+        if (isPermission("MTR601D2")){
+            ckArray.add("来料入库扫描");
+            ckResources.add(R.drawable.llrksm);
+        }
+
+        if (isPermission("MTR601D3")){
+            ckArray.add("来料出库扫描");
+            ckResources.add(R.drawable.llcksm);
+        }
+
+        if (isPermission("MTR601D4")){
+            ckArray.add("生产收料扫描");
+            ckResources.add(R.drawable.scslsm);
+        }
+
+        if (isPermission("MTR601D5")){
+            ckArray.add("生产退料扫描");
+            ckResources.add(R.drawable.sctlsm);
+        }
+
+        titles.add(ckArray);
+        imgs.add(ckResources);
+
 
         //混料与烤料
         List<String>zsscytlArray=new ArrayList<>();
@@ -340,8 +375,20 @@ public class MainPresenter extends BasePresenter{
                     case "组装退料":
                         goToZztl();
                         break;
-                    case "移库退料到仓库":
-                        goToYktldck();
+                    case "采购入库条码打印":
+                        goToCgrktmdy();
+                        break;
+                    case "来料入库扫描":
+                        goToLlrksm();
+                        break;
+                    case "来料出库扫描":
+                        goToLlcksm();
+                        break;
+                    case "生产收料扫描":
+                        goToScslsm();
+                        break;
+                    case "生产退料扫描":
+                        goToSctlsm();
                         break;
 
                 }
@@ -350,7 +397,38 @@ public class MainPresenter extends BasePresenter{
         });
     }
 
+    //生产退料扫描
+    private void goToSctlsm() {
+        Intent intent=new Intent(context, YkActivity.class);
+        intent.putExtra("startType",YkActivity.START_TYPE_SCTLSM);
+        context.startActivity(intent);
+    }
 
+    //生产收料扫描
+    private void goToScslsm() {
+        Intent intent=new Intent(context, YkActivity.class);
+        intent.putExtra("startType",YkActivity.START_TYPE_SCSLSM);
+        context.startActivity(intent);
+    }
+
+    //来料出库扫描
+    private void goToLlcksm() {
+        Intent intent=new Intent(context, WydrckActivity.class);
+        intent.putExtra("startType",WydrckActivity.START_TYPE_LLCKSM);
+        context.startActivity(intent);
+    }
+
+    //来料入库扫描
+    private void goToLlrksm() {
+        Intent intent=new Intent(context, WydrckActivity.class);
+        intent.putExtra("startType",WydrckActivity.START_TYPE_LLRKSM);
+        context.startActivity(intent);
+    }
+
+    //采购来料入库扫描
+    private void goToCgrktmdy() {
+        context.startActivity(new Intent(context, CgrktmdyActivity.class));
+    }
 
 
     public boolean isPermission(String functionCode){

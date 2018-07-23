@@ -38,9 +38,11 @@ public class YkActivity extends BaseActivity implements IYkView {
     private YkPresenter presenter;
     private WydrckScanAdapter scanAdapter;
     private WydrckZsAdapter zsAdapter;
-    public static int START_TYPE_YK=0,
+    public static final int START_TYPE_YK=0,
             START_TYPE_GDTLDYLZ=1,
-            START_TYPE_YKTLDCK=2;
+            START_TYPE_YKTLDCK=2,
+            START_TYPE_SCTLSM=3,
+            START_TYPE_SCSLSM=4;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -93,6 +95,12 @@ public class YkActivity extends BaseActivity implements IYkView {
                 break;
             case 2:
                 actionBar.setTitle("移库退料到仓库");
+                break;
+            case START_TYPE_SCSLSM:
+                actionBar.setTitle("生产收料扫描");
+                break;
+            case START_TYPE_SCTLSM:
+                actionBar.setTitle("生产退料扫描");
                 break;
         }
     }

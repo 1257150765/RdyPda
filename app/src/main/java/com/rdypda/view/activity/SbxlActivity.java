@@ -415,6 +415,7 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
 
             }
         });
+
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (!adapter.isEnabled()) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this, 3);
@@ -514,7 +515,7 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
             public void onClick(DialogInterface dialog, int which) {
                 presenter.setSbbh(sbdm[which]);
                 setSbbhText(sbmc[which]);
-                presenter.getScanList(sbdm[which]);
+                //presenter.getScanList(sbdm[which]);
                 dialog.dismiss();
             }
         });

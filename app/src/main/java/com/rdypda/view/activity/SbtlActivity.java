@@ -272,7 +272,13 @@ public class SbtlActivity extends BaseActivity implements ISbtlView {
         ylggText.setText(ylgg);
         tmslText.setText(tmsl);
         trzsText.setText(trzs);
-        bzslEd.setText(tmsl);
+        //如果是设备投料  不会默认全投入
+        if (startType == START_TYPE_SBTL ){
+
+        }else {
+            bzslEd.setText(tmsl);
+        }
+
         //每次扫描后都需要保存到本地，用来处理扫描了，但是不点加料也不点取消的情况
         Map<String,String> map = new HashMap<>();
         map.put(SharePreferenceUtil.DATA_TYPE_WL_TMBH,tmbh);

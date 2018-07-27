@@ -17,6 +17,7 @@ import com.rdypda.presenter.CgrktmdyPresentor;
 import com.rdypda.view.viewinterface.ICgrktmdyView;
 import com.rdypda.view.widget.PowerButton;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +63,7 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
     private String strDw = "";
     private String wlgg = "";
     private String qrCode = "";
+    private String wlpmChinese = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +101,21 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
                 break;
             //获取条码
             case R.id.btn_getbarcode_cgrktmdyActivity:
+                String wlbh2 = edWlbh.getText().toString();
+                String gysdm2 = edGysdm.getText().toString();
+                String ddbh = etDdbh.getText().toString();
                 //presentor.getBarCode();
                 break;
             //打印
             case R.id.btn_print_cgrktmdyActivity:
-                //presentor.printEvent();
+                String qrcode = "PN81030010-000*LT20180723*BRSK18072300007*QY100*UTPCS*PD20180723*MN*WKADMIN*GN123456789*SPRDY2018001";
+                String s = "";
+                try {
+                    s = new String(qrcode.getBytes("utf-8"),"gb2312");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                presentor.printEvent(s,wlpmChinese.trim()+","+wlgg,etDdbh.getText().toString(),etScpc.getText().toString(),etBz.getText().toString());
                 break;
             //入库
             case R.id.btn_rk_cgrktmdyActivity:
@@ -113,8 +125,6 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
     }
 
 
-
-
     @Override
     public void onQueryWlbhSucceed(final String[] wldmArr, final List<Map<String, String>> wlbhData) {
         if (wlbhData.size() == 1){
@@ -122,8 +132,8 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
             //Log.d(TAG, "onClick: "+wlbhData.get(which).get("itm_wlgg"));
             tvWlgg.setText(wlbhData.get(0).get("itm_wlgg"));
             strDw = wlbhData.get(0).get("itm_unit");
-            /*wlpmChinese = wlbhData.get(0).get("itm_wlpm");
-            wlpmEnlight = wlbhData.get(0).get("itm_ywwlpm");*/
+            wlpmChinese = wlbhData.get(0).get("itm_wlpm");
+            /*wlpmEnlight = wlbhData.get(0).get("itm_ywwlpm");*/
             wlgg = wlbhData.get(0).get("itm_wlgg");
             return;
         }
@@ -135,8 +145,8 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
                 //Log.d(TAG, "onClick: "+wlbhData.get(which).get("itm_wlgg"));
                 tvWlgg.setText(wlbhData.get(which).get("itm_wlgg"));
                 strDw = wlbhData.get(which).get("itm_unit");
-                /*wlpmChinese = wlbhData.get(which).get("itm_wlpm");
-                wlpmEnlight = wlbhData.get(which).get("itm_ywwlpm");*/
+                wlpmChinese = wlbhData.get(which).get("itm_wlpm");
+                /*wlpmEnlight = wlbhData.get(which).get("itm_ywwlpm");*/
                 wlgg = wlbhData.get(0).get("itm_wlgg");
                 dialog.dismiss();
             }
@@ -146,7 +156,7 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
 
     @Override
     public void onQueryGysdmSucceed(String gysdm) {
-
+        
     }
 
     @Override

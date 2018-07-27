@@ -43,6 +43,19 @@ public class PrinterUtil {
             preferenUtil.setInt("printNum",0);
             Log.e("printNum",2+"");
         }
+
+        //preferenUtil.setInt("printNum",1);
+        tscActivity.clearbuffer();
+    }
+
+    /**
+     *
+     * @param address
+     */
+    public void openPort2(String address){
+        tscActivity.openport(address);
+        //打印纸宽，高，打印密度（值越大越暗），传感器类型（0，代表垂直传感器，1代表黑色标记传感器。），设置垂直间隙高度的差距，设置间隙/黑色标记的移位距离
+        tscActivity.setup(74,43,4,10,0,3,0);
         tscActivity.clearbuffer();
     }
 
@@ -57,9 +70,9 @@ public class PrinterUtil {
         tscActivity.barcode(x,y,"128",70,1,0,1,1,barcode);
     }
 
-    //M代表
+    //x y 防错级别 打印点大小（疏密程度） 模式（A自动，M手动） 选择度数(0度) 版本(1是原始版本,2是增强版本),mask(不清楚) 二维码
     public void printQRCode(String str,int x,int y,int weight){
-        tscActivity.sendcommand("QRCODE "+x+","+y+",M,"+weight+",M,0,M1,S2,\"A"+str+"\" \n");
+        tscActivity.sendcommand("QRCODE "+x+","+y+",M,"+weight+",M,0,M2,S2,\"A"+str+"\" \n");
     }
 
     public void startPrint(){

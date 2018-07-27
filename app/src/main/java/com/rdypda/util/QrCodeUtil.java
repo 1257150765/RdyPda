@@ -97,4 +97,29 @@ public class QrCodeUtil {
             return "error";
         }
     }
+
+    /**
+     * 供应商代码
+     * @return
+     */
+    public String getGysdm() {
+        try {
+            return object.getString("SP");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+    /**
+     * 收货单号
+     * @return
+     */
+    public String getShdh() {
+        try {
+            return object.getString("GN");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
 }

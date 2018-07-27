@@ -33,6 +33,7 @@ import com.rdypda.adapter.SbtlZsAdapter;
 import com.rdypda.model.cache.PreferenUtil;
 import com.rdypda.presenter.HlbzPresenter;
 import com.rdypda.presenter.SbxlPresenter;
+import com.rdypda.util.QrCodeUtil;
 import com.rdypda.view.viewinterface.ISbxlView;
 import com.rdypda.view.viewinterface.OnItemClickListener;
 import com.rdypda.view.widget.PowerButton;
@@ -132,6 +133,7 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
                 actionBar.setTitle("组装退料");
                 sbbhText.setText("线别：");
                 sbbhEd.setHint("请输入线别");
+
                 hlBtn.setVisibility(View.GONE);
                 tips = "清料后表示投料全部用完，无余数";
                 break;
@@ -378,10 +380,12 @@ public class SbxlActivity extends BaseActivity implements ISbxlView {
         printBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                QrCodeUtil qrCodeUtil = new QrCodeUtil(tmbhText.getText().toString());
+
                 presenter.printEven(ylggText.getText().toString(),
                         szggText.getText().toString(),
                         zyryText.getText().toString(),
-                        bzslEd.getText().toString(),
+                        bzslEd.getText().toString()+" "+qrCodeUtil.getDw(),
                         tmbhText.getText().toString(),
                         new HlbzPresenter.OnPrintListener() {
                             @Override

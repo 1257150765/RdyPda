@@ -257,6 +257,7 @@ public class CgrktmdyPresentor extends BasePresenter {
      * @param mapKw
      */
     public void getBarCode(String wlbh, String scpc, String bzsl, String strDw, Map<String, String> mapKw) {
+
         if (wlbh.equals("")){
             view.setShowMsgDialogEnable("请先输入物料编号");
             return;
@@ -315,7 +316,16 @@ public class CgrktmdyPresentor extends BasePresenter {
         });
     }
 
-    public void printEvent(final String qrCode, final String wlpmChinese, final String wlpmEnlight, final String wlgg) {
+    /**
+     *
+     * @param qrCode 二维码
+     * @param wlpmChinese 物料品名 wlgg
+     * @param ddbh 订单编号
+     * @param scpc 生产批次
+     * @param beizhu 备注
+     */
+    public void printEvent(final String qrCode, final String wlpmChinese, final String ddbh, final String scpc, final String beizhu) {
+
         if (!BluetoothAdapter.getDefaultAdapter().isEnabled()){
             view.showBlueToothAddressDialog();
             return;
@@ -324,10 +334,26 @@ public class CgrktmdyPresentor extends BasePresenter {
             view.showBlueToothAddressDialog();
             return;
         }
-        if (qrCode==null){
+
+        if (ddbh == null || "".equals(ddbh)){
+            view.setShowMsgDialogEnable("请输入订单编号");
+            return;
+        }
+        if (wlpmChinese == null || ",".equals(wlpmChinese)){
+            view.setShowMsgDialogEnable("请先验证物料编号");
+            return;
+        }
+        if (scpc == null || "".equals(scpc)){
+            view.setShowMsgDialogEnable("请输入生产批次");
+            return;
+        }
+
+        if (qrCode == null || "".equals(qrCode)){
             view.setShowMsgDialogEnable("请先获取条码序号");
             return;
         }
+
+
 
         view.setShowProgressDialogEnable(true);
         final PrinterUtil util=new PrinterUtil(context);
@@ -336,13 +362,21 @@ public class CgrktmdyPresentor extends BasePresenter {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 String address=preferenUtil.getString("blueToothAddress");
-                util.openPort(address);
-                util.printFont("原料编号:"+qrCodeUtil.getWlbh(),15,55);
-                util.printFont("品名规格:"+wlpmChinese+",",15,105);
-                util.printFont(wlgg+" ",15,140);
-                util.printFont("批次号:"+qrCodeUtil.getScpc(),15,185);
-                util.printFont("条码编号:"+qrCodeUtil.getTmxh(),15,235);
-                util.printQRCode(qrCode,340,55,6);
+                int startX = 25;
+                int distance = 37;
+                int startY = 15;
+                util.openPort2(address);
+                util.printFont("物料编号:"+qrCodeUtil.getWlbh(),startX,(startY+distance*0));
+                util.printFont("供应商代码:"+qrCodeUtil.getGysdm(),300,(startY+distance*0));
+                util.printFont("物料规格:"+wlpmChinese+"",startX,(startY+distance*1));
+                //util.printFont(wlgg+" ",15,140);
+                util.printFont("订单编号:"+ddbh,startX,(startY+distance*2));
+                util.printFont("生产批次:"+scpc,startX,(startY+distance*3));
+                util.printFont("生产日期:"+qrCodeUtil.getScpc(),startX,(startY+distance*4));
+                util.printFont("包装数量:"+qrCodeUtil.getBzsl()+qrCodeUtil.getDw(),startX,(startY+distance*5));
+                util.printFont("条码编号:"+qrCodeUtil.getTmxh(),startX,(startY+distance*6));
+                util.printFont("备注:"+beizhu,startX,(startY+distance*7));
+                util.printQRCode(qrCode,380,(startY+distance*3),4);
                 util.startPrint();
                 Log.e("printMsg",qrCode);
                 e.onNext("");
@@ -373,6 +407,7 @@ public class CgrktmdyPresentor extends BasePresenter {
         });
     }
 
+    //入库
     public void rk() {
 
     }

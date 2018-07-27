@@ -337,11 +337,12 @@ public class PddyPresenter extends BasePresenter{
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                     String address=preferenUtil.getString("blueToothAddress");
                     util.openPort(address);
-                    util.printFont("原料编号:"+qrCodeUtil.getWlbh(),15,55);
+                    util.printFont("物料编号:"+qrCodeUtil.getWlbh(),15,55);
                     util.printFont("品名规格:"+wlpmChinese+",",15,105);
                     util.printFont(wlgg+" ",15,140);
                     util.printFont("批次号:"+qrCodeUtil.getScpc(),15,185);
-                    util.printFont("条码编号:"+qrCodeUtil.getTmxh(),15,235);
+                    util.printFont("包装数量:"+qrCodeUtil.getBzsl()+""+qrCodeUtil.getDw(),15,235);
+                    util.printFont("条码编号:"+qrCodeUtil.getTmxh(),15,285);
                     util.printQRCode(qrCode,340,55,6);
                     util.startPrint();
                     Log.e("printMsg",qrCode);

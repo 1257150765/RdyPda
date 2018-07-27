@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.rdypda.model.network.WebService;
 import com.rdypda.util.PrinterUtil;
+import com.rdypda.util.QrCodeUtil;
 import com.rdypda.view.viewinterface.ILlddrMsgView;
 
 import org.json.JSONArray;
@@ -110,16 +111,18 @@ public class LlddrMsgPresenter extends BasePresenter{
         }
         view.setProgressDialogEnable("打印中...",true);
         final PrinterUtil util=new PrinterUtil(context);
+        final QrCodeUtil qrCodeUtil = new QrCodeUtil(printMsg);
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 String address=preferenUtil.getString("blueToothAddress");
                 util.openPort(address);
-                util.printFont("原料编号:"+wldm.trim(),15,55);
+                util.printFont("物料编号:"+wldm.trim(),15,55);
                 util.printFont("品名规格:"+wlpm.trim()+",",15,105);
                 util.printFont(wlgg+" ",15,140);
                 util.printFont("批次号:"+tmpch.trim(),15,185);
-                util.printFont("条码编号:"+tmbh.trim(),15,235);
+                util.printFont("包装数量:"+qrCodeUtil.getBzsl()+""+qrCodeUtil.getDw(),15,235);
+                util.printFont("条码编号:"+tmbh.trim(),15,285);
                 util.printQRCode(printMsg,320,55,6);
                 util.startPrint();
                 Log.e("printMsg",printMsg);

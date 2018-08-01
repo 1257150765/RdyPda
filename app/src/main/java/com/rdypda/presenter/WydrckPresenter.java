@@ -45,19 +45,19 @@ public class WydrckPresenter extends BasePresenter {
         scanUtil.setOnScanListener(new ScanUtil.OnScanListener() {
             @Override
             public void onSuccess(String result) {
-                if (startType==WydrckActivity.START_TYPE_WYDRK|startType==WydrckActivity.START_TYPE_WYDCK){
+                if (startType==WydrckActivity.START_TYPE_WYDRK |startType==WydrckActivity.START_TYPE_WYDCK || startType == WydrckActivity.START_TYPE_LLCKSM|| startType == WydrckActivity.START_TYPE_LLRKSM){
                     String tmbh=new QrCodeUtil(result).getTmxh();
                     view.setTmEd(tmbh);
                     isValidCode(tmbh);
-                }else if (startType==WydrckActivity.START_TYPE_GDTH){
+                }else if (startType==WydrckActivity.START_TYPE_GDTH || startType == WydrckActivity.START_TYPE_GDSH){
                     if (scanType == SCAN_TYPE_TMBH) {
                         String tmbh = new QrCodeUtil(result).getTmxh();
-                        view.setTmEd(tmbh);
+                        //view.setTmEd(tmbh);
                         isValidCode(tmbh);
                     }else if (scanType == SCAN_TYPE_GDH){
-                        String gdh = new QrCodeUtil(result).getTmxh();
-                        view.setGdhEd(gdh);
-                        isValidGDH(gdh);
+                        //String gdh = new QrCodeUtil(result).getGDH();
+                        //view.setGdhEd(gdh);
+                        isValidGDH(result);
                     }
                 }
             }
@@ -70,20 +70,24 @@ public class WydrckPresenter extends BasePresenter {
         getKc();
     }
 
+    //验证工单号
     public void isValidGDH(final String gdh) {
         if (gdh.equals("")){
             view.showMsgDialog("请先输入工单号");
             return;
         }
-        if (ftyIdAndstkId.equals(";")){
-            view.showMsgDialog("请先选择接收库位");
-            return;
+        /*//如果是工单收货才需要接收库位
+        if (startType == WydrckActivity.START_TYPE_GDSH) {
+            if (ftyIdAndstkId.equals(";")) {
+                view.showMsgDialog("请先选择接收库位");
+                return;
+            }
         }
         String[]kw=ftyIdAndstkId.split(";");
         if (kw.length<2){
             view.showMsgDialog("接收库位解析失败");
             return;
-        }
+        }*/
         view.setShowProgressDialogEnable(true);
 
         String sql=String.format("Call Proc_PDA_SoValid('%s');", gdh);
@@ -100,10 +104,10 @@ public class WydrckPresenter extends BasePresenter {
                     String result = value.getJSONArray("Table1").getJSONObject(0).getString("cRetMsg");
                     if (result.equals("OK")){
                         WydrckPresenter.this.gdh = gdh;
-                        view.onQueryGdhSucceed(result);
-                        view.showMsgDialog("工单号验证成功");
+                        view.onQueryGdhSucceed(gdh);
+                        //view.showMsgDialog("工单号验证成功");
                     }
-                    Log.d(TAG, "onNext: result"+result);
+                    //Log.d(TAG, "onNext: result"+result);
                     //String .put("sl",value.getJSONObject(0).getString("brp_Qty"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -181,8 +185,8 @@ public class WydrckPresenter extends BasePresenter {
      * @param tmbh
      */
     public void isValidCode(String tmbh){
-        //如果是工单退货，应该先验证工单号
-        if (startType == WydrckActivity.START_TYPE_GDTH) {
+        //如果是工单退货，工单退货 应该先验证工单号
+        if (startType == WydrckActivity.START_TYPE_GDTH ||startType == WydrckActivity.START_TYPE_GDSH) {
             if (gdh.equals("")) {
                 view.showMsgDialog("请先输入工单号");
                 return;
@@ -192,34 +196,48 @@ public class WydrckPresenter extends BasePresenter {
             view.showMsgDialog("请先输入条码编号");
             return;
         }
-        if (startType!=WydrckActivity.START_TYPE_WYDCK&ftyIdAndstkId.equals(";")){
+        //工单收货 无源单入库 来料入库 都需要选择库位
+        if ((startType == WydrckActivity.START_TYPE_WYDRK ||startType == WydrckActivity.START_TYPE_GDSH || startType == WydrckActivity.START_TYPE_LLRKSM )&ftyIdAndstkId.equals(";")){
             view.showMsgDialog("请先选择接收库位");
             return;
         }
-        String[]kw=ftyIdAndstkId.split(";");
-        if (startType!=WydrckActivity.START_TYPE_WYDCK&kw.length<4){
+        //工单收货 无源单入库 来料入库 都需要选择库位
+        String[] kw = ftyIdAndstkId.split(";");
+        if ((startType == WydrckActivity.START_TYPE_WYDRK ||startType == WydrckActivity.START_TYPE_GDSH ||startType == WydrckActivity.START_TYPE_LLRKSM)&kw.length<4){
             view.showMsgDialog("接收库位解析失败");
             return;
         }
         view.setShowProgressDialogEnable(true);
-        String type = null;
-        if (startType== WydrckActivity.START_TYPE_WYDRK){
-            type="GDSH";
-        }else if (startType == WydrckActivity.START_TYPE_WYDCK){
-            type="CHWY";
-        }else if (startType == WydrckActivity.START_TYPE_GDTH){
+        String type = "";
+        if (startType== WydrckActivity.START_TYPE_GDSH){//工单收货
+            type = "GDSH";
+        } else if (startType == WydrckActivity.START_TYPE_GDTH){//工单退货
             type = "GDTH";
+        }else if (startType == WydrckActivity.START_TYPE_WYDCK){//无源单出库
+            type = "CHWY";
+        }else if (startType == WydrckActivity.START_TYPE_WYDRK){//无源单入库
+            type = "RKWY";
+        }else if (startType == WydrckActivity.START_TYPE_LLRKSM){//来料入库扫描
+            type = "GNSH";
+        }else if (startType == WydrckActivity.START_TYPE_LLCKSM){//来料出库扫描
+            type = "GNTH";
         }
         String sql = "";
+        //工单退货
         if (startType == WydrckActivity.START_TYPE_GDTH){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s','%s','%s');",
                     tmbh,type,gdh,preferenUtil.getString("userId"));
-        }else if (startType==WydrckActivity.START_TYPE_WYDRK){
+            //工单收货 无源单入库  来料入库
+        }else if (startType == WydrckActivity.START_TYPE_LLRKSM || startType == WydrckActivity.START_TYPE_WYDRK){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s', '%s;%s;%s;%s' ,'%s');",
                     tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"));
-        }else if (startType==WydrckActivity.START_TYPE_WYDCK){
+        //无源单出库  来料出库
+        }else if (startType==WydrckActivity.START_TYPE_WYDCK || startType == WydrckActivity.START_TYPE_LLCKSM){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s', '' ,'%s');",
                     tmbh,type,preferenUtil.getString("userId"));
+        }else if (startType == WydrckActivity.START_TYPE_GDSH){
+            sql = String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s' ,'%s','%s');",
+                    tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),gdh);
         }
 
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
@@ -254,9 +272,7 @@ public class WydrckPresenter extends BasePresenter {
                 view.setShowProgressDialogEnable(false);
                 view.showMsgDialog(e.getMessage());
                 e.printStackTrace();
-
             }
-
             @Override
             public void onComplete() {
 
@@ -267,10 +283,18 @@ public class WydrckPresenter extends BasePresenter {
     public void cancelScan(final String tmxh, final String wlbh, final String tmsl){
         view.setShowProgressDialogEnable(true);
         String type="";
-        if (startType==WydrckActivity.START_TYPE_WYDRK){
-            type="GDSH";
-        }else {
-            type="CHWY";
+        if (startType==WydrckActivity.START_TYPE_GDSH){//工单收货
+            type = "GDSH";
+        }else if (startType == WydrckActivity.START_TYPE_GDTH){//工单退货
+            type = "GDTH";
+        }else if (startType == WydrckActivity.START_TYPE_WYDCK){//无源单出库
+            type = "CHWY";
+        }else if (startType == WydrckActivity.START_TYPE_WYDRK){//无源单入库
+            type = "RKWY";
+        }else if (startType == WydrckActivity.START_TYPE_LLRKSM){//来料入库
+            type = "GNSH";
+        }else if (startType == WydrckActivity.START_TYPE_LLCKSM){//来料出库
+            type = "GNTH";
         }
         String sql=String.format("Call Proc_PDA_CancelScan('%s', '%s', '%s');",type,tmxh,preferenUtil.getString("userId"));
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
@@ -309,15 +333,11 @@ public class WydrckPresenter extends BasePresenter {
     }
 
     /**
-     * 设置是出库，入库，还是工单退货
+     * 设置是无源单出库，无源单入库，工单收货  工单退货  来料入库  来料出库
      * @param startType
      */
     public void setStartType(int startType) {
         this.startType = startType;
-        //如果是工单退货，扫描类型设置为先扫工单号
-        if (startType == WydrckActivity.START_TYPE_GDTH){
-            startType = SCAN_TYPE_GDH;
-        }
     }
 
     public void setScanType(int scanType) {

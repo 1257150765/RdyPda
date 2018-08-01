@@ -285,15 +285,21 @@ public class MainPresenter extends BasePresenter{
             tmglArray.add("无源单出库");
             tmglResources.add(R.drawable.wydck_icon);
         }//isPermission("HLKL09")
+
+        if (isPermission("HLKL11")){
+            tmglArray.add("工单收货");
+            tmglResources.add(R.drawable.gdsh);
+        }
         if (isPermission("HLKL09")){
             tmglArray.add("工单退货");
-            tmglResources.add(R.drawable.gdth_icon);
+            tmglResources.add(R.drawable.gdth);
         }
 
         if (isPermission("HLKL10")){
             tmglArray.add("盘点打印");
             tmglResources.add(R.drawable.kcpd_icon);
         }
+
 
         titles.add(tmglArray);
         imgs.add(tmglResources);
@@ -353,6 +359,9 @@ public class MainPresenter extends BasePresenter{
                         break;
                     case "工单退货":
                         goToGdth();
+                        break;
+                    case "工单收货":
+                        goToGdsh();
                         break;
                     case "盘点打印":
                         goToPddy();
@@ -618,6 +627,14 @@ public class MainPresenter extends BasePresenter{
     private void goToGdth() {
         Intent intent=new Intent(context, WydrckActivity.class);
         intent.putExtra("startType",WydrckActivity.START_TYPE_GDTH);
+        context.startActivity(intent);
+    }
+    /**
+     * 工单收货
+     */
+    private void goToGdsh() {
+        Intent intent=new Intent(context, WydrckActivity.class);
+        intent.putExtra("startType",WydrckActivity.START_TYPE_GDSH);
         context.startActivity(intent);
     }
     //移库

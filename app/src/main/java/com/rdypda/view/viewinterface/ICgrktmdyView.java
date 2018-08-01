@@ -18,4 +18,11 @@ public interface ICgrktmdyView extends IBaseView2{
 
     void onGetBarCodeSucceed(String barCode, String qrCode);
 
+    void onCheckGysdmSucceed(boolean b, String s);
+
+    void onCheckDdbhmSucceed(boolean b, String mom_zzdh);
+
+    void onCheckShdhmSucceed(boolean b, String grdNo);
+
+    void onRkSucceed();
 }

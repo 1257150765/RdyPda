@@ -3,7 +3,9 @@ package com.rdypda.view.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -64,6 +66,9 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
     private String wlgg = "";
     private String qrCode = "";
     private String wlpmChinese = "";
+    private boolean isCheckGysdm = false;
+    private String TAG = "CgrktmdyActivity";
+    private boolean isCheckShdh = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,25 +76,91 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
         setContentView(R.layout.activity_cgrktmdy);
         ButterKnife.bind(this);
         presentor = new CgrktmdyPresentor(this,this);
+        initView();
     }
 
     @Override
     protected void initView() {
+        edGysdm.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    isCheckGysdm = false;
+                }else if (!hasFocus){
+                    //如果失去了焦点
+                    String gysdm = edGysdm.getText().toString();
+                    presentor.checkGysdm(gysdm);
+                }
+            }
+        });
 
+        etShdh.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.d(TAG, "etShdh: "+hasFocus);
+                if (!isCheckGysdm){//如果未验证供应商代码
+                    return;
+                }else if(hasFocus){
+                   isCheckShdh = false;
+                } else if (!hasFocus){
+                    //如果失去了焦点
+                    String shdh = etShdh.getText().toString();
+                    presentor.checkShdh(shdh);
+                }
+            }
+        });
+        etDdbh.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.d(TAG, "etDdbh: "+hasFocus);
+                if (!isCheckShdh){//如果未验证收货单号
+                    return;
+                }else if (!hasFocus){
+                    //如果失去了焦点
+                    String ddbh = etDdbh.getText().toString();
+                    presentor.checkDdbh(ddbh);
+                }
+            }
+        });
     }
 
-    @OnClick({R.id.btn_query_gysdm_cgrktmdyActivity, R.id.btn_query_wlbh_cgrktmdyActivity,R.id.btn_getbarcode_cgrktmdyActivity, R.id.btn_print_cgrktmdyActivity, R.id.btn_rk_cgrktmdyActivity})
+    @Override
+    public void onCheckGysdmSucceed(boolean isCheckGysdm, String gysdm) {
+        this.isCheckGysdm = isCheckGysdm;
+        if (isCheckGysdm){
+            edGysdm.setText(gysdm);
+        }else {
+            edGysdm.setText("");
+            edGysdm.requestFocus();
+        }
+    }
+
+    @Override
+    public void onCheckShdhmSucceed(boolean b, String grdNo) {
+        this.isCheckShdh = b;
+        if (b){
+            etShdh.setText(grdNo);
+        }else {
+            etShdh.setText("");
+            etShdh.requestFocus();
+        }
+    }
+
+    @Override
+    public void onCheckDdbhmSucceed(boolean b, String mom_zzdh) {
+        if (b){
+            etDdbh.setText(mom_zzdh);
+        }else {
+            etDdbh.setText("");
+            etDdbh.requestFocus();
+        }
+    }
+
+
+    @OnClick({R.id.btn_query_wlbh_cgrktmdyActivity,R.id.btn_getbarcode_cgrktmdyActivity, R.id.btn_print_cgrktmdyActivity, R.id.btn_rk_cgrktmdyActivity})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            //供应商代码查询
-            case R.id.btn_query_gysdm_cgrktmdyActivity:
-                String gysdm = edGysdm.getText().toString();
-                if ("".equals(gysdm)){
-                    setShowMsgDialogEnable("请输入物料编码");
-                    return;
-                }
-                presentor.queryGysdm(gysdm);
-                break;
+
             //物料代码
             case R.id.btn_query_wlbh_cgrktmdyActivity:
                 String wlbh = edWlbh.getText().toString();
@@ -104,26 +175,30 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
                 String wlbh2 = edWlbh.getText().toString();
                 String gysdm2 = edGysdm.getText().toString();
                 String ddbh = etDdbh.getText().toString();
-                //presentor.getBarCode();
+                String shdh = etShdh.getText().toString();
+                String bz = etBz.getText().toString();
+                String scpc = etScpc.getText().toString();
+                String bzsl = etBzsl.getText().toString();
+                presentor.getBarCode(gysdm2,shdh,ddbh,bz,wlbh2,scpc,bzsl,mapKw);
                 break;
             //打印
             case R.id.btn_print_cgrktmdyActivity:
-                String qrcode = "PN81030010-000*LT20180723*BRSK18072300007*QY100*UTPCS*PD20180723*MN*WKADMIN*GN123456789*SPRDY2018001";
-                String s = "";
-                try {
-                    s = new String(qrcode.getBytes("utf-8"),"gb2312");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                presentor.printEvent(s,wlpmChinese.trim()+","+wlgg,etDdbh.getText().toString(),etScpc.getText().toString(),etBz.getText().toString());
+                String qrcode = qrCode;
+                presentor.printEvent(qrcode,wlpmChinese.trim()+","+wlgg,etDdbh.getText().toString(),etScpc.getText().toString(),etBz.getText().toString());
                 break;
             //入库
             case R.id.btn_rk_cgrktmdyActivity:
-                presentor.rk();
+                String tmbh = tvTmbh.getText().toString();
+                presentor.rk(tmbh,mapKw);
                 break;
         }
     }
 
+    @Override
+    public void onRkSucceed() {
+        qrCode = "";
+        tvTmbh.setText("");
+    }
 
     @Override
     public void onQueryWlbhSucceed(final String[] wldmArr, final List<Map<String, String>> wlbhData) {
@@ -172,7 +247,6 @@ public class CgrktmdyActivity extends BaseActivity2 implements ICgrktmdyView{
                 }else {
                     mapKw = data.get(position-1);
                 }
-
             }
 
             @Override

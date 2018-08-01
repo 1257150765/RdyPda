@@ -122,4 +122,31 @@ public class QrCodeUtil {
             return "error";
         }
     }
+
+    public String getScrq() {
+        try {
+            return object.getString("PD");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    public String getDdbh() {
+        try {
+            return object.getString("SO");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    public String getGDH() {
+        try {
+            return object.getString("SO");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
 }

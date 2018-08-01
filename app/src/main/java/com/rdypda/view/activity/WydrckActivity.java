@@ -33,6 +33,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ *
+ */
 public class WydrckActivity extends BaseActivity implements IWydrckView {
 
     @BindView(R.id.gdh_ed)
@@ -49,7 +52,8 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
     public static final int START_TYPE_LLRKSM = 3;
     public static final int START_TYPE_LLCKSM = 4;
     public static int START_TYPE_WYDCK = 1;
-    public static int START_TYPE_WYDRK = 0;
+    public static int START_TYPE_WYDRK = 5;
+    public static int START_TYPE_GDSH = 0;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.zs_list)
@@ -73,11 +77,13 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         initView();
         presenter = new WydrckPresenter(this, this);
         presenter.setStartType(startType);
+        gdhEd.requestFocus();
     }
 
     @Override
     protected void initView() {
         //根据焦点的变化，设置扫描类型
+
         gdhEd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -94,6 +100,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
                 }
             }
         });
+
         startType = getIntent().getIntExtra("startType", 0);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("提示");
@@ -113,24 +120,36 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         actionBar.setDisplayHomeAsUpEnabled(true);
         refreshScanList(new ArrayList<Map<String, String>>());
         refreshZsList(new ArrayList<Map<String, String>>());
-        if (startType == START_TYPE_WYDRK) {
-            actionBar.setTitle("无源单入库");
+        //退料类型  不需要库位，隐藏掉
+        //工单类型 需要工单号  显示工单号输入框
+
+        if (startType == START_TYPE_GDSH) {
+            actionBar.setTitle("工单收货");
             kwText.setText("接收储位：");
+            //如果是工单收货，显示工单号输入框
+            llGdhContainer.setVisibility(View.VISIBLE);
+        }else if (startType == START_TYPE_GDTH) {
+            actionBar.setTitle("工单退货");
+            kwText.setText("出库库位：");
+            //如果是工单退货，显示工单号输入框，隐藏库位
+            kwLayout.setVisibility(View.GONE);
+            llGdhContainer.setVisibility(View.VISIBLE);
         } else if (startType == START_TYPE_WYDCK) {
             actionBar.setTitle("无源单出库");
             kwText.setText("出库库位：");
+            //隐藏库位
             kwLayout.setVisibility(View.GONE);
-        } else if (startType == START_TYPE_GDTH) {
-            actionBar.setTitle("工单退货");
-            kwText.setText("出库库位：");
-            //如果是工单退货，显示工单号输入框
-            llGdhContainer.setVisibility(View.VISIBLE);
+        } else if (startType == START_TYPE_WYDRK){
+            actionBar.setTitle("无源单入库");
+            kwText.setText("接收储位：");
         }else if (startType == START_TYPE_LLRKSM){
             actionBar.setTitle("来料入库扫描");
             kwText.setText("接收储位：");
         }else if (startType == START_TYPE_LLCKSM){
             actionBar.setTitle("来料出库扫描");
             kwText.setText("出库库位：");
+            //隐藏库位
+            kwLayout.setVisibility(View.GONE);
         }
     }
 
@@ -141,6 +160,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
                 presenter.isValidCode(tmbhEd.getText().toString());
                 break;
             case R.id.gd_sure_btn:
+                //gdhEd.setText("");
                 presenter.isValidGDH(gdhEd.getText().toString());
                 //gdhEd.setText("FD180227000");
                 break;
@@ -248,6 +268,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
 
     @Override
     public void onQueryGdhSucceed(String result) {
+        gdhEd.setText(result);
         tmbhEd.setFocusable(true);
         tmbhEd.setFocusableInTouchMode(true);
         tmbhEd.requestFocus();

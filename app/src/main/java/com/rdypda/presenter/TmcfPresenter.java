@@ -30,6 +30,7 @@ public class TmcfPresenter extends BasePresenter {
     private ITmcfView view;
     private ScanUtil scanUtil;
     private String printMsg,wldm,pmgg,pch,xtmxh,szgg,ylgg,bzsl,date,zyry;
+    private String bz;
 
 
     public TmcfPresenter(Context context,ITmcfView view) {
@@ -140,6 +141,7 @@ public class TmcfPresenter extends BasePresenter {
                     date=array.getJSONObject(0).getString("brp_Prd_Date");
                     bzsl=array.getJSONObject(0).getString("brp_Qty")+array.getJSONObject(0).getString("brp_Unit");
                     zyry=array.getJSONObject(0).getString("brp_Rec_Name");
+                    bz = array.getJSONObject(0).getString("brp_desc");
                     printEven();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -203,23 +205,23 @@ public class TmcfPresenter extends BasePresenter {
                     Log.e("printMsg",printMsg);
                     e.onNext("");
                     e.onComplete();
-                }else if ("PO".equals(start)){
+                }else if ("GN".equals(start)){
+                    QrCodeUtil qrCodeUtil = new QrCodeUtil(printMsg);
                     String address=preferenUtil.getString("blueToothAddress");
-                    int startX = 25;
+                    int startX = 30;
                     int distance = 37;
                     int startY = 15;
                     util.openPort2(address);
-                    QrCodeUtil qrCodeUtil = new QrCodeUtil(printMsg);
                     util.printFont("物料编号:"+qrCodeUtil.getWlbh(),startX,(startY+distance*0));
                     util.printFont("供应商代码:"+qrCodeUtil.getGysdm(),300,(startY+distance*0));
-                    util.printFont("物料规格:"+wlpm_1.trim()+","+wlpm_3.trim(),startX,(startY+distance*1));
+                    util.printFont("物料规格:"+wlpm_1.trim()+""+wlpm_3.trim(),startX,(startY+distance*1));
                     //util.printFont(wlgg+" ",15,140);
-                    //util.printFont("订单编号:"+ddbh,startX,(startY+distance*2));
-                    //util.printFont("生产批次:"+scpc,startX,(startY+distance*3));
-                    util.printFont("生产日期:"+qrCodeUtil.getScpc(),startX,(startY+distance*4));
+                    util.printFont("订单编号:"+qrCodeUtil.getDdbh(),startX,(startY+distance*2));
+                    util.printFont("生产批次:"+qrCodeUtil.getScpc(),startX,(startY+distance*3));
+                    util.printFont("生产日期:"+qrCodeUtil.getScrq(),startX,(startY+distance*4));
                     util.printFont("包装数量:"+qrCodeUtil.getBzsl()+qrCodeUtil.getDw(),startX,(startY+distance*5));
                     util.printFont("条码编号:"+qrCodeUtil.getTmxh(),startX,(startY+distance*6));
-                    //util.printFont("备注:"+beizhu,startX,(startY+distance*7));
+                    util.printFont("备注:"+bz,startX,(startY+distance*7));
                     util.printQRCode(printMsg,380,(startY+distance*3),4);
                     util.startPrint();
                     Log.e("printMsg",printMsg);

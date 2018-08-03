@@ -132,12 +132,12 @@ public class MainPresenter extends BasePresenter{
         }
 
         if (isPermission("MTR601D2")){
-            ckArray.add("来料入库扫描");
+            ckArray.add("来料收货扫描");
             ckResources.add(R.drawable.llrksm);
         }
 
         if (isPermission("MTR601D3")){
-            ckArray.add("来料出库扫描");
+            ckArray.add("来料退货扫描");
             ckResources.add(R.drawable.llcksm);
         }
 
@@ -387,10 +387,10 @@ public class MainPresenter extends BasePresenter{
                     case "采购入库条码打印":
                         goToCgrktmdy();
                         break;
-                    case "来料入库扫描":
+                    case "来料收货扫描":
                         goToLlrksm();
                         break;
-                    case "来料出库扫描":
+                    case "来料退货扫描":
                         goToLlcksm();
                         break;
                     case "生产收料扫描":
@@ -427,14 +427,14 @@ public class MainPresenter extends BasePresenter{
         context.startActivity(intent);
     }
 
-    //来料入库扫描
+    //来料收货扫描
     private void goToLlrksm() {
         Intent intent=new Intent(context, WydrckActivity.class);
         intent.putExtra("startType",WydrckActivity.START_TYPE_LLRKSM);
         context.startActivity(intent);
     }
 
-    //采购来料入库扫描
+    //采购来料退货扫描
     private void goToCgrktmdy() {
         context.startActivity(new Intent(context, CgrktmdyActivity.class));
     }

@@ -202,8 +202,8 @@ public class TmbdPresenter extends BasePresenter {
                     util.printFont("订单编号:"+qrCodeUtil.getDdbh(),startX,(startY+distance*2));
                     util.printFont("生产批次:"+qrCodeUtil.getScpc(),startX,(startY+distance*3));
                     util.printFont("生产日期:"+qrCodeUtil.getScrq(),startX,(startY+distance*4));
-                    util.printFont("包装数量:"+qrCodeUtil.getBzsl()+qrCodeUtil.getDw(),startX,(startY+distance*5));
-                    util.printFont("条码编号:"+qrCodeUtil.getTmxh(),startX,(startY+distance*6));
+                    util.printFont("包装数量:"+bzsl.trim(),startX,(startY+distance*5));
+                    util.printFont("条码编号:"+xtmxh.trim(),startX,(startY+distance*6));
                     util.printFont("备注:"+bz,startX,(startY+distance*7));
                     util.printQRCode(printMsg,380,(startY+distance*3),4);
                     util.startPrint();
@@ -213,12 +213,21 @@ public class TmbdPresenter extends BasePresenter {
                 }else{
                     String address=preferenUtil.getString("blueToothAddress");
                     util.openPort(address);
-                    util.printFont("原料编号:"+wldm.trim(),15,55);
+                    /*util.printFont("原料编号:"+wldm.trim(),15,55);
                     util.printFont("品名规格:"+zwPmgg.trim()+",",15,105);
                     util.printFont(ywPmgg.trim()+" ",15,140);
                     util.printFont("批次号:"+pch.trim(),15,185);
                     util.printFont("条码编号:"+xtmxh.trim(),15,235);
-                    util.printQRCode(printMsg,340,55,6);
+                    util.printQRCode(printMsg,340,55,6);*/
+
+                    util.printFont("物料编号:"+wldm.trim(),15,55);
+                    util.printFont("品名规格:"+zwPmgg.trim()+",",15,105);
+                    util.printFont(ywPmgg+" ",15,140);
+                    util.printFont("批次号:"+pch.trim(),15,185);
+                    util.printFont("包装数量:"+bzsl.trim(),15,235);
+                    util.printFont("条码编号:"+xtmxh.trim(),15,285);
+                    util.printQRCode(printMsg,320,55,6);
+
                     util.startPrint();
                     Log.e("printMsg",printMsg);
                     e.onNext("");

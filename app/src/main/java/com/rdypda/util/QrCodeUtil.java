@@ -141,6 +141,7 @@ public class QrCodeUtil {
         }
     }
 
+    @Deprecated
     public String getGDH() {
         try {
             return object.getString("SO");

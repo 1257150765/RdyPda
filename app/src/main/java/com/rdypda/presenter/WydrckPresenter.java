@@ -236,8 +236,8 @@ public class WydrckPresenter extends BasePresenter {
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s', '' ,'%s');",
                     tmbh,type,preferenUtil.getString("userId"));
         }else if (startType == WydrckActivity.START_TYPE_GDSH){
-            sql = String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s' ,'%s','%s');",
-                    tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),gdh);
+            sql = String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s' ,'%s','%s','%s');",
+                    tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),gdh,"");
         }
 
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {

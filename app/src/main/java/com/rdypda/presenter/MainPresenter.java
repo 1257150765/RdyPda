@@ -13,6 +13,7 @@ import com.rdypda.R;
 import com.rdypda.model.network.WebService;
 import com.rdypda.util.DownloadUtils;
 import com.rdypda.view.activity.CgrktmdyActivity;
+import com.rdypda.view.activity.CsllwxcbActivity;
 import com.rdypda.view.activity.HlActivity;
 import com.rdypda.view.activity.HlbzActivity;
 import com.rdypda.view.activity.PddyActivity;
@@ -117,6 +118,11 @@ public class MainPresenter extends BasePresenter{
         if (isPermission("MTR512D1")){
             ylzckArray.add("原料退料");
             ylzckResources.add(R.drawable.yltl_icon);
+        }
+        //isPermission("MTR513D1")
+        if (true){
+            ylzckArray.add("厂商来料外箱拆包");
+            ylzckResources.add(R.drawable.csllwxcb);
         }
 
         titles.add(ylzckArray);
@@ -399,11 +405,20 @@ public class MainPresenter extends BasePresenter{
                     case "生产退料扫描":
                         goToSctlsm();
                         break;
+                    case "厂商来料外箱拆包":
+                        goToCsllwxcb();
+                        break;
 
                 }
                 return true;
             }
         });
+    }
+
+    //厂商来料外箱拆包
+    private void goToCsllwxcb() {
+        Intent intent=new Intent(context, CsllwxcbActivity.class);
+        context.startActivity(intent);
     }
 
     //生产退料扫描

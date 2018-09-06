@@ -22,6 +22,7 @@ import com.rdypda.R;
 import com.rdypda.adapter.WydrckScanAdapter;
 import com.rdypda.adapter.WydrckZsAdapter;
 import com.rdypda.presenter.WydrckPresenter;
+import com.rdypda.util.QrCodeUtil;
 import com.rdypda.view.viewinterface.IWydrckView;
 import com.rdypda.view.viewinterface.OnItemClickListener;
 
@@ -157,7 +158,14 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tm_sure_btn:
-                presenter.isValidCode(tmbhEd.getText().toString());
+                // TODO: 2018-09-05 测试
+                String tm = tmbhEd.getText().toString();
+                if (!"".equals(tm) && tm.contains("*")){
+                    QrCodeUtil qrCodeUtil = new QrCodeUtil(tm);
+                    presenter.isValidCode(qrCodeUtil.getTmxh(), tm);
+                }else {
+                    presenter.isValidCode(tm,"");
+                }
                 break;
             case R.id.gd_sure_btn:
                 //gdhEd.setText("");

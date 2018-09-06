@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.rdypda.model.network.WebService;
+import com.rdypda.util.Config;
 import com.rdypda.util.PrinterUtil;
 import com.rdypda.util.QrCodeUtil;
 import com.rdypda.util.ScanUtil;
@@ -30,7 +31,7 @@ public class TmbdPresenter extends BasePresenter {
     private ITmbdView view;
     private ScanUtil scanUtil;
     private String wldm,zwPmgg,ywPmgg,pch,xtmxh,printMsg,szgg,ylgg,bzsl,date,zyry;;
-    private String bz;
+    private String bz,type;
 
     public TmbdPresenter(Context context,ITmbdView view) {
         super(context);
@@ -130,6 +131,8 @@ public class TmbdPresenter extends BasePresenter {
                     bzsl=array.getJSONObject(0).getString("brp_Qty")+array.getJSONObject(0).getString("brp_Unit");
                     zyry=array.getJSONObject(0).getString("brp_Rec_Name");
                     bz = array.getJSONObject(0).getString("brp_desc");
+                    type = array.getJSONObject(0).getString("brp_Type");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }finally {
@@ -174,7 +177,30 @@ public class TmbdPresenter extends BasePresenter {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 String start = xtmxh.substring(0, 2);
-                if (start.equals("HL") || start.equals("XL")){
+                //条码类型是新增的参数，为了不改之前的代码，这里仅仅判断是否是厂商来料条码（和GN模板一样的，有时间再改 ）
+                if (type !=null && (Config.BAR_TYPE_SUPPN.equals(type) || Config.BAR_TYPE_SUPPW.equals(type))){
+                    QrCodeUtil qrCodeUtil = new QrCodeUtil(printMsg);
+                    String address=preferenUtil.getString("blueToothAddress");
+                    int startX = 30;
+                    int distance = 37;
+                    int startY = 15;
+                    util.openPort2(address);
+                    util.printFont("物料编号:"+qrCodeUtil.getWlbh(),startX,(startY+distance*0));
+                    util.printFont("供应商代码:"+qrCodeUtil.getGysdm(),300,(startY+distance*0));
+                    util.printFont("物料规格:"+zwPmgg.trim()+""+ywPmgg.trim(),startX,(startY+distance*1));
+                    //util.printFont(wlgg+" ",15,140);
+                    util.printFont("订单编号:"+qrCodeUtil.getDdbh(),startX,(startY+distance*2));
+                    util.printFont("生产批次:"+qrCodeUtil.getScpc(),startX,(startY+distance*3));
+                    util.printFont("生产日期:"+qrCodeUtil.getScrq(),startX,(startY+distance*4));
+                    util.printFont("包装数量:"+bzsl.trim(),startX,(startY+distance*5));
+                    util.printFont("条码编号:"+xtmxh.trim(),startX,(startY+distance*6));
+                    util.printFont("备注:"+bz,startX,(startY+distance*7));
+                    util.printQRCode(printMsg,380,(startY+distance*3),4);
+                    util.startPrint();
+                    Log.e("printMsg",printMsg);
+                    e.onNext("");
+                    e.onComplete();
+                }else if (start.equals("HL") || start.equals("XL")){
                     String address=preferenUtil.getString("blueToothAddress");
                     util.openPort(address);
                     util.printFont("原料规格:"+ylgg.trim(),15,55);

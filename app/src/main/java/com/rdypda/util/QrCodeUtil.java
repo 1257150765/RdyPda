@@ -20,11 +20,13 @@ public class QrCodeUtil {
         this.qrcode = qrcode;
         object=new JSONObject();
         String[] items=qrcode.split("\\*");
+
         for (int i=0;i<items.length;i++){
             if (items[i].length()<2)
                 break;
             String key=items[i].substring(0,2);
-            String values=items[i].substring(2,items[i].length());
+            //厂商来料的格式：名称>值 瑞多益格式：名称值（没有隔开）
+            String values=items[i].substring(2,items[i].length()).replaceAll(">","");
             try {
                 object.put(key,values);
             } catch (JSONException e) {
@@ -42,7 +44,7 @@ public class QrCodeUtil {
             return object.getString("PN");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -55,7 +57,7 @@ public class QrCodeUtil {
             return object.getString("LT");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -65,10 +67,18 @@ public class QrCodeUtil {
      */
     public String getTmxh() {
         try {
-            return object.getString("BR");
+            String br = object.getString("BR");
+            if (br != null && !"".equals(br)){
+                String gysdm = getGysdm();
+                //如果供应商条码不为空  并且条码编号不以供应商条码开头 并且不是pda厂商来料打印的条码（GN） 则在条码前加上供应商代码
+                if (!"".equals(gysdm) && !br.startsWith(gysdm) && !br.startsWith("GN")){
+                    br = gysdm +br;
+                }
+            }
+            return br;
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -81,7 +91,7 @@ public class QrCodeUtil {
             return object.getString("QY");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -94,7 +104,7 @@ public class QrCodeUtil {
             return object.getString("UT");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -107,7 +117,7 @@ public class QrCodeUtil {
             return object.getString("SP");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
     /**
@@ -119,7 +129,7 @@ public class QrCodeUtil {
             return object.getString("GN");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -128,16 +138,28 @@ public class QrCodeUtil {
             return object.getString("PD");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
+    /**
+     * 获取订单编号 瑞多益定义的订单编号是so开头，厂商来料的是PO开头
+     * @return
+     */
     public String getDdbh() {
+        String so;
+        String po;
         try {
-            return object.getString("SO");
+            so = object.getString("SO");
+            if (so == null|| "".equals(so)){
+                 po = object.getString("PO");
+                 return po;
+            }else {
+                return so;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 
@@ -147,7 +169,7 @@ public class QrCodeUtil {
             return object.getString("SO");
         } catch (JSONException e) {
             e.printStackTrace();
-            return "error";
+            return "";
         }
     }
 }

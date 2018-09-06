@@ -119,8 +119,8 @@ public class MainPresenter extends BasePresenter{
             ylzckArray.add("原料退料");
             ylzckResources.add(R.drawable.yltl_icon);
         }
-        //isPermission("MTR513D1")
-        if (true){
+        //
+        if (isPermission("MTR513D1")){
             ylzckArray.add("厂商来料外箱拆包");
             ylzckResources.add(R.drawable.csllwxcb);
         }

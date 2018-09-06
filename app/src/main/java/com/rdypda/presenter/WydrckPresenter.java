@@ -48,12 +48,12 @@ public class WydrckPresenter extends BasePresenter {
                 if (startType==WydrckActivity.START_TYPE_WYDRK |startType==WydrckActivity.START_TYPE_WYDCK || startType == WydrckActivity.START_TYPE_LLCKSM|| startType == WydrckActivity.START_TYPE_LLRKSM){
                     String tmbh=new QrCodeUtil(result).getTmxh();
                     view.setTmEd(tmbh);
-                    isValidCode(tmbh);
+                    isValidCode(tmbh,result);
                 }else if (startType==WydrckActivity.START_TYPE_GDTH || startType == WydrckActivity.START_TYPE_GDSH){
                     if (scanType == SCAN_TYPE_TMBH) {
                         String tmbh = new QrCodeUtil(result).getTmxh();
                         //view.setTmEd(tmbh);
-                        isValidCode(tmbh);
+                        isValidCode(tmbh,result);
                     }else if (scanType == SCAN_TYPE_GDH){
                         //String gdh = new QrCodeUtil(result).getGDH();
                         //view.setGdhEd(gdh);
@@ -184,7 +184,7 @@ public class WydrckPresenter extends BasePresenter {
      * 验证条码编号
      * @param tmbh
      */
-    public void isValidCode(String tmbh){
+    public void isValidCode(String tmbh,String qrcode){
         //如果是工单退货，工单退货 应该先验证工单号
         if (startType == WydrckActivity.START_TYPE_GDTH ||startType == WydrckActivity.START_TYPE_GDSH) {
             if (gdh.equals("")) {
@@ -228,16 +228,16 @@ public class WydrckPresenter extends BasePresenter {
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s','%s','%s');",
                     tmbh,type,gdh,preferenUtil.getString("userId"));
             //工单收货 无源单入库  来料入库
-        }else if (startType == WydrckActivity.START_TYPE_LLRKSM || startType == WydrckActivity.START_TYPE_WYDRK){
+        }else if ( startType == WydrckActivity.START_TYPE_WYDRK){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s', '%s;%s;%s;%s' ,'%s');",
                     tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"));
         //无源单出库  来料出库
         }else if (startType==WydrckActivity.START_TYPE_WYDCK || startType == WydrckActivity.START_TYPE_LLCKSM){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s', '' ,'%s');",
                     tmbh,type,preferenUtil.getString("userId"));
-        }else if (startType == WydrckActivity.START_TYPE_GDSH){
+        }else if (startType == WydrckActivity.START_TYPE_LLRKSM ||startType == WydrckActivity.START_TYPE_GDSH){
             sql = String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s' ,'%s','%s','%s');",
-                    tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),gdh,"");
+                    tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),gdh,qrcode);
         }
 
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {

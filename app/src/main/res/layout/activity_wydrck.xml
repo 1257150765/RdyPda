@@ -36,6 +36,37 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/ll_sh_layout"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="送货单号：" />
+
+                        <EditText
+                            android:editable="false"
+                            android:id="@+id/et_sh_cgrktmdyActivity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textSize="15dp" />
+
+                        <com.rdypda.view.widget.PowerButton
+                            android:id="@+id/btn_sh_new"
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/color_green"
+                            android:text="开单"
+                            android:textColor="@android:color/white" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/kw_layout"

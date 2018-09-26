@@ -3,19 +3,24 @@ package com.rdypda.view.activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.liangmutian.airrecyclerview.swipetoloadlayout.BaseRecyclerAdapter;
 import com.rdypda.R;
@@ -25,6 +30,7 @@ import com.rdypda.presenter.WydrckPresenter;
 import com.rdypda.util.QrCodeUtil;
 import com.rdypda.view.viewinterface.IWydrckView;
 import com.rdypda.view.viewinterface.OnItemClickListener;
+import com.rdypda.view.widget.PowerButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +49,10 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
     EditText gdhEd;
     @BindView(R.id.ll_gdh_container)
     LinearLayout llGdhContainer;
+    @BindView(R.id.et_sh_cgrktmdyActivity)
+    EditText etShCgrktmdyActivity;
+    @BindView(R.id.ll_sh_layout)
+    LinearLayout llShLayout;
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
     private WydrckPresenter presenter;
@@ -88,7 +98,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         gdhEd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     presenter.setScanType(WydrckPresenter.SCAN_TYPE_GDH);
                 }
             }
@@ -96,7 +106,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         tmbhEd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
+                if (hasFocus) {
                     presenter.setScanType(WydrckPresenter.SCAN_TYPE_TMBH);
                 }
             }
@@ -129,7 +139,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
             kwText.setText("接收储位：");
             //如果是工单收货，显示工单号输入框
             llGdhContainer.setVisibility(View.VISIBLE);
-        }else if (startType == START_TYPE_GDTH) {
+        } else if (startType == START_TYPE_GDTH) {
             actionBar.setTitle("工单退货");
             kwText.setText("出库库位：");
             //如果是工单退货，显示工单号输入框，隐藏库位
@@ -140,13 +150,14 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
             kwText.setText("出库库位：");
             //隐藏库位
             kwLayout.setVisibility(View.GONE);
-        } else if (startType == START_TYPE_WYDRK){
+        } else if (startType == START_TYPE_WYDRK) {
             actionBar.setTitle("无源单入库");
             kwText.setText("接收储位：");
-        }else if (startType == START_TYPE_LLRKSM){
+        } else if (startType == START_TYPE_LLRKSM) {
             actionBar.setTitle("来料入库扫描");
+            llShLayout.setVisibility(View.VISIBLE);
             kwText.setText("接收储位：");
-        }else if (startType == START_TYPE_LLCKSM){
+        } else if (startType == START_TYPE_LLCKSM) {
             actionBar.setTitle("来料出库扫描");
             kwText.setText("出库库位：");
             //隐藏库位
@@ -154,17 +165,24 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         }
     }
 
-    @OnClick({R.id.tm_sure_btn,R.id.gd_sure_btn})
+    @OnClick({R.id.tm_sure_btn, R.id.gd_sure_btn,R.id.btn_sh_new})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tm_sure_btn:
                 // TODO: 2018-09-05 测试
                 String tm = tmbhEd.getText().toString();
-                if (!"".equals(tm) && tm.contains("*")){
+                if ((!"".equals(tm)) && tm.contains("*")) {
                     QrCodeUtil qrCodeUtil = new QrCodeUtil(tm);
-                    presenter.isValidCode(qrCodeUtil.getTmxh(), tm);
-                }else {
-                    presenter.isValidCode(tm,"");
+
+                    if (startType == WydrckActivity.START_TYPE_LLRKSM){
+                        presenter.setSh(etShCgrktmdyActivity.getText().toString());
+                    }
+                    presenter.isValidCode(qrCodeUtil.getTmxh(),tm);
+                } else {
+                    if (startType == WydrckActivity.START_TYPE_LLRKSM){
+                        presenter.setSh(etShCgrktmdyActivity.getText().toString());
+                    }
+                    presenter.isValidCode(tm, "");
                 }
                 break;
             case R.id.gd_sure_btn:
@@ -172,6 +190,40 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
                 presenter.isValidGDH(gdhEd.getText().toString());
                 //gdhEd.setText("FD180227000");
                 break;
+            case R.id.btn_sh_new:
+                showNewDialog();
+                break;
+        }
+    }
+
+    private void showNewDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View view= LayoutInflater.from(this).inflate(R.layout.dialog_new_order,null);
+            final AlertDialog deleteDialog=new AlertDialog.Builder(this).setView(view).create();
+            //隐藏键盘
+            deleteDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            PowerButton delBtn=(PowerButton)view.findViewById(R.id.sure_btn);
+            PowerButton cancelBtn=(PowerButton) view.findViewById(R.id.cancel_btn);
+            final TextInputEditText sh=(TextInputEditText)view.findViewById(R.id.sh_ed);
+            delBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String dh=sh.getText().toString();
+                    if (dh.equals("")){
+                        Toast.makeText(WydrckActivity.this,"送货单号不能为空",Toast.LENGTH_SHORT).show();
+                    }else {
+                        WydrckActivity.this.etShCgrktmdyActivity.setText(dh);
+                        deleteDialog.dismiss();
+                    }
+                }
+            });
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteDialog.dismiss();
+                }
+            });
+            deleteDialog.show();
         }
     }
 
@@ -305,4 +357,6 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         presenter.closeScanUtil();
         super.onDestroy();
     }
+
+
 }

@@ -1,7 +1,6 @@
 package com.rdypda.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.rdypda.model.network.WebService;
 import com.rdypda.util.QrCodeUtil;
@@ -35,6 +34,7 @@ public class WydrckPresenter extends BasePresenter {
     private String ftyIdAndstkId=";";
     private int startType=0;
     private int scanType = 0;
+    private String sh = "";//送货单号（来料扫描有此参数）
 
 
     public WydrckPresenter(Context context, final IWydrckView view) {
@@ -183,8 +183,15 @@ public class WydrckPresenter extends BasePresenter {
     /**
      * 验证条码编号
      * @param tmbh
+     *
      */
-    public void isValidCode(String tmbh,String qrcode){
+    public void isValidCode(String tmbh, String qrcode){
+        if (startType == WydrckActivity.START_TYPE_LLRKSM){
+            if ("".equals(sh)){
+                view.showMsgDialog("请先输入送货单号");
+                return;
+            }
+        }
         //如果是工单退货，工单退货 应该先验证工单号
         if (startType == WydrckActivity.START_TYPE_GDTH ||startType == WydrckActivity.START_TYPE_GDSH) {
             if (gdh.equals("")) {
@@ -223,6 +230,7 @@ public class WydrckPresenter extends BasePresenter {
             type = "GNTH";
         }
         String sql = "";
+        //下面这么多接口  重点是type参数  接口都可以使用同一个,(Proc_PDA_IsValidCode2),这个是最新的接口，以前的不做调整
         //工单退货
         if (startType == WydrckActivity.START_TYPE_GDTH){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s','%s','%s');",
@@ -235,9 +243,12 @@ public class WydrckPresenter extends BasePresenter {
         }else if (startType==WydrckActivity.START_TYPE_WYDCK || startType == WydrckActivity.START_TYPE_LLCKSM){
             sql = String.format("Call Proc_PDA_IsValidCode('%s','%s', '' ,'%s');",
                     tmbh,type,preferenUtil.getString("userId"));
-        }else if (startType == WydrckActivity.START_TYPE_LLRKSM ||startType == WydrckActivity.START_TYPE_GDSH){
+        }else if (startType == WydrckActivity.START_TYPE_GDSH){
             sql = String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s' ,'%s','%s','%s');",
                     tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),gdh,qrcode);
+        }else if (startType == WydrckActivity.START_TYPE_LLRKSM){
+            sql = String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s' ,'%s','%s','%s');",
+                    tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),sh,qrcode);
         }
 
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
@@ -342,5 +353,9 @@ public class WydrckPresenter extends BasePresenter {
 
     public void setScanType(int scanType) {
         this.scanType = scanType;
+    }
+
+    public void setSh(String sh) {
+        this.sh = sh;
     }
 }

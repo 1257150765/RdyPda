@@ -213,7 +213,7 @@ public class TmcfPresenter extends BasePresenter {
                     util.printFont("生产日期:"+qrCodeUtil.getScrq(),startX,(startY+distance*4));
                     util.printFont("包装数量:"+bzsl.trim(),startX,(startY+distance*5));
                     util.printFont("条码编号:"+xtmxh,startX,(startY+distance*6));
-                    util.printFont("备注:"+bz,startX,(startY+distance*7));
+                    //util.printFont("备注:"+bz,startX,(startY+distance*7));
                     util.printQRCode(printMsg,380,(startY+distance*3),4);
                     util.startPrint();
                     Log.e("printMsg",printMsg);
@@ -249,7 +249,7 @@ public class TmcfPresenter extends BasePresenter {
                     util.printFont("生产日期:"+qrCodeUtil.getScrq(),startX,(startY+distance*4));
                     util.printFont("包装数量:"+bzsl.trim(),startX,(startY+distance*5));
                     util.printFont("条码编号:"+xtmxh,startX,(startY+distance*6));
-                    util.printFont("备注:"+bz,startX,(startY+distance*7));
+                    //util.printFont("备注:"+bz,startX,(startY+distance*7));
                     util.printQRCode(printMsg,380,(startY+distance*3),4);
                     util.startPrint();
                     Log.e("printMsg",printMsg);

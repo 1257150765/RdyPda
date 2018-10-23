@@ -321,7 +321,7 @@ public class CgrktmdyPresentor extends BasePresenter {
                 util.printFont("生产日期:"+qrCodeUtil.getScrq(),startX,(startY+distance*4));
                 util.printFont("包装数量:"+qrCodeUtil.getBzsl()+qrCodeUtil.getDw(),startX,(startY+distance*5));
                 util.printFont("条码编号:"+qrCodeUtil.getTmxh(),startX,(startY+distance*6));
-                util.printFont("备注:"+beizhu,startX,(startY+distance*7));
+                //util.printFont("备注:"+beizhu,startX,(startY+distance*7));
                 util.printQRCode(qrCode,380,(startY+distance*3),4);
                 util.startPrint();
                 Log.e("printMsg",qrCode);

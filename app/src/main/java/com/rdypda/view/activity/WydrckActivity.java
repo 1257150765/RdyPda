@@ -212,6 +212,7 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
                     if (dh.equals("")){
                         Toast.makeText(WydrckActivity.this,"送货单号不能为空",Toast.LENGTH_SHORT).show();
                     }else {
+                        presenter.setSh(dh);
                         WydrckActivity.this.etShCgrktmdyActivity.setText(dh);
                         deleteDialog.dismiss();
                     }

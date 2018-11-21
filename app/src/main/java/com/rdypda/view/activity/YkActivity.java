@@ -61,8 +61,9 @@ public class YkActivity extends BaseActivity implements IYkView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yk);
         ButterKnife.bind(this);
-        initView();
         presenter=new YkPresenter(this,this);
+        initView();
+        presenter.getKc();
     }
 
     @Override

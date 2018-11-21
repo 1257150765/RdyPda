@@ -5,6 +5,7 @@ import android.content.Context;
 import com.rdypda.model.network.WebService;
 import com.rdypda.util.QrCodeUtil;
 import com.rdypda.util.ScanUtil;
+import com.rdypda.view.activity.YkActivity;
 import com.rdypda.view.viewinterface.IYkView;
 
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ public class YkPresenter extends BasePresenter {
     private IYkView view;
     private ScanUtil scanUtil;
     private String ftyIdAndstkId=";";
+    private int startType;
 
     public YkPresenter(Context context, final IYkView view) {
         super(context);
@@ -46,7 +48,7 @@ public class YkPresenter extends BasePresenter {
 
             }
         });
-        getKc();
+        //getKc();
     }
 
     //获取接收库位
@@ -113,9 +115,21 @@ public class YkPresenter extends BasePresenter {
             return;
         }
         view.setShowProgressDialogEnable(true);
-        String type;
-        String sql=String.format("Call Proc_PDA_IsValidCode('%s','WYYK', '%s;%s;%s;%s ', '%s');",
-                tmbh,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"));
+        String type = "";
+        switch (startType){
+            case YkActivity.START_TYPE_SCSLSM:
+                type = "MTR_IN2";
+                break;
+            case YkActivity.START_TYPE_SCTLSM:
+                type = "MTR_OUT2";
+                break;
+            default:
+                type = "WYYK";
+                break;
+        }
+
+        String sql=String.format("Call Proc_PDA_IsValidCode('%s','%s', '%s;%s;%s;%s ', '%s');",
+                tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"));
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -197,5 +211,9 @@ public class YkPresenter extends BasePresenter {
 
     public void closeScanUtil(){
         scanUtil.close();
+    }
+
+    public void setType(int startType) {
+        this.startType = startType;
     }
 }

@@ -4,8 +4,8 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        android:versionCode="3"
-        android:versionName="1.0.7.5"
+        versionCode="3"
+        versionName="1.0.7.5"
         applicationId "com.rdypda"
         minSdkVersion 19
         targetSdkVersion 26
@@ -15,6 +15,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "${defaultConfig.versionName}-Yalun-Tmes.apk"
+            }
         }
     }
 

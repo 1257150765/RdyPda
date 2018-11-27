@@ -25,4 +25,6 @@ public interface ICgrktmdyView extends IBaseView2{
     void onCheckShdhmSucceed(boolean b, String grdNo);
 
     void onRkSucceed();
+
+    void onCheckScrqSucceed(boolean b);
 }

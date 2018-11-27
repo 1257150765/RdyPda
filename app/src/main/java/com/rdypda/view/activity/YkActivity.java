@@ -98,9 +98,11 @@ public class YkActivity extends BaseActivity implements IYkView {
                 actionBar.setTitle("移库退料到仓库");
                 break;
             case START_TYPE_SCSLSM:
+                presenter.setType(START_TYPE_SCSLSM);
                 actionBar.setTitle("生产收料扫描");
                 break;
             case START_TYPE_SCTLSM:
+                presenter.setType(START_TYPE_SCTLSM);
                 actionBar.setTitle("生产退料扫描");
                 break;
         }

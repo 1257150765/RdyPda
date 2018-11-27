@@ -458,10 +458,56 @@ public class CgrktmdyPresentor extends BasePresenter {
                     JSONArray item=value.getJSONArray("Table1");
                     if (item.length() > 0){
                         String mom_zzdh = item.getJSONObject(0).getString("mom_zzdh");
+
                         view.onCheckDdbhmSucceed(true,mom_zzdh);
+
                     }else {
                         view.setShowMsgDialogEnable("订单编号验证失败,请重新输入");
                         view.onCheckDdbhmSucceed(false,"");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    view.setShowMsgDialogEnable("Json数据解析出错");
+                }finally {
+                    view.setShowProgressDialogEnable(false);
+                }
+            }
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                view.setShowProgressDialogEnable(false);
+                view.setShowMsgDialogEnable(e.getMessage());
+            }
+            @Override
+            public void onComplete() {
+            }
+        });
+    }
+
+    public void checkScrq(String scrq) {
+        view.setShowProgressDialogEnable(true);
+        String sql=String.format("Call Proc_check_Stock_Day('%s')",scrq);
+        WebService.querySqlCommandJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+            @Override
+            public void onNext(JSONObject value) {
+                try {
+                    JSONArray item=value.getJSONArray("Table1");
+                    String cRetMsg = "";
+                    if (item.length() > 0){
+                        cRetMsg = item.getJSONObject(0).getString("cRetMsg");
+                        if ("OK".equals(cRetMsg)){
+                            view.onCheckScrqSucceed(true);
+                        }else {
+                            view.setShowMsgDialogEnable(cRetMsg);
+                            view.onCheckScrqSucceed(false);
+                        }
+                    }else {
+                        view.setShowMsgDialogEnable("验证日期出错");
+                        view.onCheckScrqSucceed(false);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -519,7 +565,7 @@ public class CgrktmdyPresentor extends BasePresenter {
         });
     }
 
-    public void getBarCode(String gysdm2, String shdh, String ddbh, String bz, String wlbh, String scpc, String bzsl, Map<String, String> mapKw) {
+    public void getBarCode(String gysdm2, String shdh, String ddbh, String bz, String wlbh, String scpc, String bzsl, Map<String, String> mapKw, Object scrq) {
         if (gysdm2.equals("")){
             view.setShowMsgDialogEnable("请先输入供应商代码");
             return;
@@ -540,6 +586,10 @@ public class CgrktmdyPresentor extends BasePresenter {
             view.setShowMsgDialogEnable("请先输入生产批次");
             return;
         }
+        if ("".equals(scrq)){
+            view.setShowMsgDialogEnable("请先选择日期");
+            return;
+        }
         if (bzsl.equals("")){
             view.setShowMsgDialogEnable("请先输入包装数量");
             return;
@@ -549,8 +599,8 @@ public class CgrktmdyPresentor extends BasePresenter {
             return;
         }
         view.setShowProgressDialogEnable(true);
-        String sql=String.format("Call Proc_GenQrcode5 ('BRP','GN', '%s', '%s', '%s', '%s', '%s', 'KG','%s', '%s', '', '', '', '%s', '', '%s');"
-                ,ddbh,shdh,wlbh,scpc,bzsl,gysdm2,mapKw.get("kwm_ftyid"),preferenUtil.getString("usr_yhdm"),bz);
+        String sql=String.format("Call Proc_GenQrcode5 ('BRP','GN', '%s', '%s', '%s', '%s', '%s', 'KG','%s', '%s', '', '', '', '%s', '%s', '%s');"
+                ,ddbh,shdh,wlbh,scpc,bzsl,gysdm2,mapKw.get("kwm_ftyid"),preferenUtil.getString("usr_yhdm"),scrq,bz);
         WebService.querySqlCommandJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
             @Override
             public void onSubscribe(Disposable d) {

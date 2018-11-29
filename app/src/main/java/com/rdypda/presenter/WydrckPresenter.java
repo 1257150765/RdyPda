@@ -193,12 +193,13 @@ public class WydrckPresenter extends BasePresenter {
             }
         }
         //如果是工单退货，工单退货 应该先验证工单号
-        if (startType == WydrckActivity.START_TYPE_GDTH ||startType == WydrckActivity.START_TYPE_GDSH) {
+        //20181129取消必填
+        /*if (startType == WydrckActivity.START_TYPE_GDTH ||startType == WydrckActivity.START_TYPE_GDSH) {
             if (gdh.equals("")) {
                 view.showMsgDialog("请先输入工单号");
                 return;
             }
-        }
+        }*/
         if (tmbh.equals("")){
             view.showMsgDialog("请先输入条码编号");
             return;

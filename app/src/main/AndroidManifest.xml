@@ -52,6 +52,7 @@
         <activity android:name=".view.activity.WydrckActivity" />
         <activity android:name=".view.activity.YkActivity" />
         <activity android:name=".view.activity.PddyActivity" />
+        <activity android:name=".view.activity.QcCheckActivity"/>
 
         <service android:name=".util.DownloadService" />
 

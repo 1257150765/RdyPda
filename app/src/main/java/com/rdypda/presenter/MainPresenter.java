@@ -19,6 +19,7 @@ import com.rdypda.view.activity.HlbzActivity;
 import com.rdypda.view.activity.PddyActivity;
 import com.rdypda.view.activity.LlddrActivity;
 import com.rdypda.view.activity.LoginActivity;
+import com.rdypda.view.activity.QcCheckActivity;
 import com.rdypda.view.activity.SbljActivity;
 import com.rdypda.view.activity.SbtlActivity;
 import com.rdypda.view.activity.SbxlActivity;
@@ -155,6 +156,11 @@ public class MainPresenter extends BasePresenter{
         if (isPermission("MTR601D5")){
             ckArray.add("生产退料扫描");
             ckResources.add(R.drawable.sctlsm);
+        }
+        //
+        if (isPermission("MTR601D6")){
+            ckArray.add("QC条码检验");
+            ckResources.add(R.mipmap.qccheck);
         }
 
         titles.add(ckArray);
@@ -307,6 +313,7 @@ public class MainPresenter extends BasePresenter{
         }
 
 
+
         titles.add(tmglArray);
         imgs.add(tmglResources);
 
@@ -405,6 +412,9 @@ public class MainPresenter extends BasePresenter{
                     case "生产退料扫描":
                         goToSctlsm();
                         break;
+                    case "QC条码检验":
+                        goToQcCheck();
+                        break;
                     case "厂商来料外箱拆包":
                         goToCsllwxcb();
                         break;
@@ -413,6 +423,11 @@ public class MainPresenter extends BasePresenter{
                 return true;
             }
         });
+    }
+
+    private void goToQcCheck() {
+        Intent intent = new Intent(context,QcCheckActivity.class);
+        context.startActivity(intent);
     }
 
     //厂商来料外箱拆包

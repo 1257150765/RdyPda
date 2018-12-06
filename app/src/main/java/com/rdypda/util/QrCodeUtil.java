@@ -17,7 +17,8 @@ public class QrCodeUtil {
     String dw;//单位
 
     public QrCodeUtil(String qrcode) {
-        this.qrcode = qrcode;
+        qrcode = qrcode.replaceAll("\\s*","");
+        this.qrcode = qrcode.replaceAll("\\s*","");
         object=new JSONObject();
         String[] items=qrcode.split("\\*");
 

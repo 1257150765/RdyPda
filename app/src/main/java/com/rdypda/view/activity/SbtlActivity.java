@@ -245,6 +245,7 @@ public class SbtlActivity extends BaseActivity implements ISbtlView {
      * @param tmsl 条码数量
      * @param trzs 加料总数
      */
+
     @Override
     public void showScanDialog(final String tmbh, String ylbh, String ylgg, final String tmsl, String trzs) {
         View view= LayoutInflater.from(this).inflate(R.layout.dialog_sbtl,null);

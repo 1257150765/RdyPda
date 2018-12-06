@@ -21,6 +21,7 @@ import com.rdypda.R;
 import com.rdypda.adapter.WydrckScanAdapter;
 import com.rdypda.adapter.WydrckZsAdapter;
 import com.rdypda.presenter.YkPresenter;
+import com.rdypda.util.QrCodeUtil;
 import com.rdypda.view.viewinterface.IYkView;
 import com.rdypda.view.viewinterface.OnItemClickListener;
 
@@ -112,7 +113,14 @@ public class YkActivity extends BaseActivity implements IYkView {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.tm_sure_btn:
-                presenter.isValidCode(tmbhEd.getText().toString());
+                String qrcode = tmbhEd.getText().toString();
+                if (qrcode.contains("*")){
+                    QrCodeUtil util = new QrCodeUtil(qrcode);
+                    presenter.isValidCode(util.getTmxh(),qrcode);
+                }else {
+                    presenter.isValidCode(qrcode,qrcode);
+                }
+
                 break;
         }
     }

@@ -40,7 +40,7 @@ public class YkPresenter extends BasePresenter {
             public void onSuccess(String result) {
                 String tmbh=new QrCodeUtil(result).getTmxh();
                 view.setTmEd(tmbh);
-                isValidCode(tmbh);
+                isValidCode(tmbh,result);
             }
 
             @Override
@@ -76,7 +76,7 @@ public class YkPresenter extends BasePresenter {
                                 array.getJSONObject(i).getString("kwm_kwdm")+"; "+
                                 array.getJSONObject(i).getString("kwm_cwdm"));
                         dataMc.add(array.getJSONObject(i).getString("kwm_kwmc")+","+
-                                    array.getJSONObject(i).getString("kwm_cwdm"));
+                                array.getJSONObject(i).getString("kwm_cwdm"));
                     }
                     view.refreshJskwSp(dataMc,data);
                 } catch (JSONException e) {
@@ -100,7 +100,7 @@ public class YkPresenter extends BasePresenter {
     }
 
     //条码验证
-    public void isValidCode(String tmbh){
+    public void isValidCode(String tmbh,String qrcode){
         if (tmbh.equals("")){
             view.showMsgDialog("请先输入条码编号");
             return;
@@ -128,8 +128,8 @@ public class YkPresenter extends BasePresenter {
                 break;
         }
 
-        String sql=String.format("Call Proc_PDA_IsValidCode('%s','%s', '%s;%s;%s;%s ', '%s');",
-                tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"));
+        String sql=String.format("Call Proc_PDA_IsValidCode2('%s','%s', '%s;%s;%s;%s ', '%s','','%s');",
+                tmbh,type,kw[0].trim(),kw[1].trim(),kw[2].trim(),kw[3].trim(),preferenUtil.getString("userId"),qrcode);
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -154,6 +154,7 @@ public class YkPresenter extends BasePresenter {
                     view.setTmEd("");
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    //view.setTmEd("");
                     view.showMsgDialog(e.getMessage());
                 }
             }
@@ -175,8 +176,21 @@ public class YkPresenter extends BasePresenter {
 
     public void cancelScan(final String tmxh, final String wlbh, final String tmsl){
         view.setShowProgressDialogEnable(true);
-        String sql=String.format("Call Proc_PDA_CancelScan('WYYK', '%s', '%s');",tmxh,preferenUtil.getString("userId"));
+        String type = "";
+        switch (startType){
+            case YkActivity.START_TYPE_SCSLSM:
+                type = "MTR_IN2";
+                break;
+            case YkActivity.START_TYPE_SCTLSM:
+                type = "MTR_OUT2";
+                break;
+            default:
+                type = "WYYK";
+                break;
+        }
+        String sql=String.format("Call Proc_PDA_CancelScan('%s', '%s', '%s');",type,tmxh,preferenUtil.getString("userId"));
         WebService.doQuerySqlCommandResultJson(sql,preferenUtil.getString("usr_Token")).subscribe(new Observer<JSONObject>() {
+
             @Override
             public void onSubscribe(Disposable d) {
 

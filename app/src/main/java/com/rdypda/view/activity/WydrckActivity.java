@@ -88,7 +88,8 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         initView();
         presenter = new WydrckPresenter(this, this);
         presenter.setStartType(startType);
-        gdhEd.requestFocus();
+        //gdhEd.requestFocus();
+
     }
 
     @Override
@@ -137,11 +138,13 @@ public class WydrckActivity extends BaseActivity implements IWydrckView {
         if (startType == START_TYPE_GDSH) {
             actionBar.setTitle("工单收货");
             kwText.setText("接收储位：");
+            tmbhEd.requestFocus();
             //如果是工单收货，显示工单号输入框
             llGdhContainer.setVisibility(View.VISIBLE);
         } else if (startType == START_TYPE_GDTH) {
             actionBar.setTitle("工单退货");
             kwText.setText("出库库位：");
+            tmbhEd.requestFocus();
             //如果是工单退货，显示工单号输入框，隐藏库位
             kwLayout.setVisibility(View.GONE);
             llGdhContainer.setVisibility(View.VISIBLE);
